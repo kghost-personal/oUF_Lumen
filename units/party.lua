@@ -103,7 +103,6 @@ local function CreateParty(self)
     RegisterStateDriver(self.OutOfCombatOverlay, "visibility", "[combat] hide; show")
 
     -- Health & Power
-    self.Health.colorClass = false
     self.Health.PostUpdate = PostUpdateHealth
     self.Power.PostUpdate = PostUpdatePower
 
@@ -267,7 +266,7 @@ if cfg.units[frame].show then
 
     local party = oUF:SpawnHeader("oUF_LumenParty", nil, "party", "showParty",
                                   true, "showRaid", false, "showPlayer", true,
-                                  "yOffset", -20, "groupBy", "ASSIGNEDROLE",
+                                  "yOffset", -5, "groupBy", "ASSIGNEDROLE",
                                   "groupingOrder", "TANK,HEALER,DAMAGER",
                                   "oUF-initialConfigFunction", ([[
         self:SetAttribute('*type2', nil)

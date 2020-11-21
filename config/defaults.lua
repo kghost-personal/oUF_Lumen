@@ -77,7 +77,7 @@ cfg.frames = {
             margin = 2 -- Spacing between HP and Power Bars
         },
         power = {
-            height = 1.5, -- Height of the Power Bar
+            height = 5, -- Height of the Power Bar
             text = {hideMax = true}
         }
     },
@@ -99,7 +99,7 @@ cfg.frames = {
         health = {margin = 0},
         power = {height = 1.5}
     },
-    playerplate = {show = true, width = 182, height = 2},
+    playerplate = {show = false, width = 182, height = 2},
     shadow = {
         show = true, -- Use frame drop shadows
         color = {0, 0, 0, 0.7}
@@ -223,7 +223,7 @@ cfg.units = {
             hideOnFull = not cfg.frames.playerplate.show
         },
         castbar = {
-            enable = true,
+            enable = false,
             pos = {
                 a1 = "BOTTOMLEFT",
                 a2 = "TOPLEFT",
@@ -279,7 +279,7 @@ cfg.units = {
         },
         name = {show = true},
         castbar = {
-            enable = true,
+            enable = false,
             color = {235 / 255, 25 / 255, 25 / 255},
             width = cfg.frames.main.width * 1.75,
             height = cfg.frames.main.height * 1.1
@@ -364,7 +364,7 @@ cfg.units = {
         },
         name = {show = true},
         castbar = {
-            enable = true,
+            enable = false,
             color = {123 / 255, 66 / 255, 200 / 255},
             width = 282,
             height = cfg.frames.main.height
@@ -441,7 +441,7 @@ cfg.units = {
         },
         name = {show = true},
         castbar = {
-            enable = true,
+            enable = false,
             color = {5 / 255, 107 / 255, 246 / 255},
             width = 200,
             height = cfg.frames.main.height
@@ -486,8 +486,8 @@ cfg.units = {
             a1 = "CENTER",
             a2 = "CENTER",
             af = "UIParent",
-            x = -550,
-            y = -102
+            x = 550,
+            y = -20
         },
         health = {
             show = true,
@@ -508,10 +508,10 @@ cfg.units = {
         },
         name = {show = true},
         auras = {
-            buffs = {show = false, spellName = false},
+            buffs = {show = true, spellName = false},
             debuffs = {show = true, spellName = false}
         },
-        showPortraits = true,
+        showPortraits = false,
         forceRole = false
     },
     partytarget = {
@@ -593,7 +593,7 @@ cfg.units = {
         forceRole = false
     },
     nameplate = {
-        show = true,
+        show = false,
         width = cfg.frames.nameplate.width,
         height = cfg.frames.nameplate.height,
         pos = {a1 = "CENTER", x = 0, y = -10},
