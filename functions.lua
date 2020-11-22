@@ -1200,17 +1200,12 @@ end
 local OnFrameEnter = function(self)
     if not self.Highlight then return end
 
-    self:SetAlpha(1) -- Player frame fading
     self.Highlight:Show() -- Mouseover highlight Show
     UnitFrame_OnEnter(self)
 end
 
 local OnFrameLeave = function(self)
     if not self.Highlight then return end
-
-    if cfg.units.player.fader.enable then -- Player frame fading
-        self:SetAlpha(cfg.units.player.fader.alpha)
-    end
 
     self.Highlight:Hide() -- Mouseover highlight Hide
     UnitFrame_OnLeave(self)
