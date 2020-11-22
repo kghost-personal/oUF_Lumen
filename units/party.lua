@@ -2,7 +2,6 @@ local A, ns = ...
 
 local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
                                        ns.G, ns.oUF
-local filters, debuffs = ns.filters, ns.debuffs
 
 local frame = "party"
 
@@ -129,10 +128,35 @@ local function CreateParty(self)
         self.Portrait = Portrait
     end
 
-    -- Debuffs
-    lum:SetDebuffAuras(self, frame, 12, 2, self.cfg.height / 2 + 2, 3,
-                       "TOPRIGHT", self, "TOPLEFT", -6, 2, "TOPRIGHT", "LEFT",
-                       "DOWN", true)
+    if self.cfg.auras.buffs.show then
+        local buffs = lum:CreateAura(self, 12, 1, self.cfg.height / 2 - 2, 0)
+        buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -2, 2)
+        buffs.initialAnchor = "TOPRIGHT"
+        buffs["growth-x"] = "LEFT"
+        buffs["growth-y"] = "DOWN"
+        self.Buffs = buffs
+    end
+
+    if self.cfg.auras.debuffs.show then
+        -- Debuffs Filter (Blacklist)
+        local DebuffsCustomFilter = function(element, unit, button, name, _, _, _, duration, _, _, _, _, spellID)
+            if spellID then
+                if ns.debuffs.list[frame][spellID] or duration == 0 then
+                    return false
+                end
+            end
+            return true
+        end
+
+        local debuffs = lum:CreateAura(self, 12, 1, self.cfg.height / 2 - 2, 0)
+        debuffs:SetPoint("TOPRIGHT", self.Buffs, "BOTTOMRIGHT", 0, 2)
+        debuffs.initialAnchor = "TOPRIGHT"
+        debuffs["growth-x"] = "LEFT"
+        debuffs["growth-y"] = "DOWN"
+        debuffs.showDebuffType = true
+        debuffs.CustomFilter = DebuffsCustomFilter
+        self.Debuffs = debuffs
+    end
 
     -- Group Role Icon
     local GroupRoleIndicator = lum:CreateGroupRoleIndicator(self)
