@@ -96,31 +96,30 @@ local function CreateParty(self)
 
     lum:SharedStyle(self, "secondary")
 
+    self.Overlay = CreateFrame("Frame", nil, self)
+    self.Overlay:SetAllPoints()
+
     -- Health & Power
     self.Health.colorClass = false
     self.Health.PostUpdate = PostUpdateHealth
     self.Power.PostUpdate = PostUpdatePower
 
     -- Texts
-    lum:CreateHealthValueString(self, m.fonts.font, cfg.fontsize - 2, "THINOUTLINE", 4,
-                                8, "LEFT")
+    lum:CreateHealthValueString(self, m.fonts.font, cfg.fontsize - 2, "THINOUTLINE", 4, 8, "LEFT")
     lum:CreatePartyNameString(self, m.fonts.mlang, cfg.fontsize)
 
     if self.cfg.health.classColoredText then
-        self:Tag(self.Name,
-                 "[lum:playerstatus] [lum:leader] [raidcolor][lum:name]")
+        self:Tag(self.Name, "[lum:playerstatus] [lum:leader] [raidcolor][lum:name]")
     end
 
-    self.classText = api:CreateFontstring(self.Health, m.fonts.font, cfg.fontsize,
-                                          "THINOUTLINE")
+    self.classText = api:CreateFontstring(self.Health, m.fonts.font, cfg.fontsize, "THINOUTLINE")
     self.classText:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -4, 5)
     self.classText:SetJustifyH("RIGHT")
     self:Tag(self.classText, "[lum:level] [raidcolor][class]")
 
     -- Portrait
     if self.cfg.showPortraits then
-        local Portrait =
-            CreateFrame("PlayerModel", "PartyPortrait", self.Health)
+        local Portrait = CreateFrame("PlayerModel", "PartyPortrait", self.Health)
         Portrait:SetAllPoints()
         Portrait:SetFrameLevel(self.Health:GetFrameLevel())
         Portrait:SetAlpha(.2)
@@ -159,15 +158,20 @@ local function CreateParty(self)
     end
 
     -- Group Role Icon
-    local GroupRoleIndicator = lum:CreateGroupRoleIndicator(self)
-    GroupRoleIndicator:SetPoint("LEFT", self, 6, -8)
-    GroupRoleIndicator:SetSize(11, 11)
-    GroupRoleIndicator:SetAlpha(0.9)
+    local GroupRoleIndicator = lum:CreateGroupRoleIndicator(self.Overlay)
+    GroupRoleIndicator:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 4, 8)
+    GroupRoleIndicator:SetSize(12, 12)
     self.GroupRoleIndicator = GroupRoleIndicator
 
+    -- Raid Target Indicator
+    local RaidTargetIndicator = self.Overlay:CreateTexture(nil, 'OVERLAY')
+    RaidTargetIndicator:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+    RaidTargetIndicator:SetSize(16, 16)
+    self.RaidTargetIndicator = RaidTargetIndicator
+
     -- Ready Check Icon
-    local ReadyCheck = self:CreateTexture()
-    ReadyCheck:SetPoint("LEFT", self, "RIGHT", 8, 0)
+    local ReadyCheck = self.Overlay:CreateTexture()
+    ReadyCheck:SetPoint("CENTER", self, "CENTER", 0, 0)
     ReadyCheck:SetSize(20, 20)
     ReadyCheck.finishedTimer = 10
     ReadyCheck.fadeTimer = 2
@@ -183,6 +187,8 @@ local function CreateParty(self)
     lum:CreateThreatBorder(self)
 
     self.Range = cfg.frames.range
+
+    self.Overlay:Raise()
 
     -- self:RegisterEvent("PLAYER_TALENT_UPDATE", PartyUpdate, true)
     -- self:RegisterEvent("CHARACTER_POINTS_CHANGED", PartyUpdate, true)

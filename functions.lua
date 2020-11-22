@@ -876,9 +876,7 @@ local function UpdateRoleIcon(self, event)
 end
 
 function lum:CreateGroupRoleIndicator(self)
-    local roleIcon = self.Health:CreateTexture(nil, "OVERLAY")
-    roleIcon:SetPoint("LEFT", self, 8, 0)
-    roleIcon:SetSize(16, 16)
+    local roleIcon = self:CreateTexture(nil, "OVERLAY")
     roleIcon.Override = UpdateRoleIcon
     self:RegisterEvent("UNIT_CONNECTION", UpdateRoleIcon)
     return roleIcon
