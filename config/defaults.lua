@@ -514,6 +514,48 @@ cfg.units = {
         showPortraits = true,
         forceRole = false
     },
+    partytarget = {
+        show = true,
+        width = 80,
+        height = 18,
+        health = {
+            show = true,
+            classColored = true,
+            gradientColored = false,
+            reactionColored = false,
+            invertedColors = true,
+            classColoredText = false,
+            smooth = true
+        },
+        power = {
+            show = false,
+            height = 0
+        },
+        name = {
+            show = true
+        }
+    },
+    partypet = {
+        show = true,
+        width = 80,
+        height = 18,
+        health = {
+            show = true,
+            classColored = true,
+            gradientColored = false,
+            reactionColored = false,
+            invertedColors = true,
+            classColoredText = false,
+            smooth = true
+        },
+        power = {
+            show = false,
+            height = 0
+        },
+        name = {
+            show = true
+        }
+    },
     raid = {show = false},
     nameplate = {
         show = true,

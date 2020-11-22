@@ -198,12 +198,55 @@ local function CreateParty(self)
     -- self:RegisterEvent("GROUP_JOINED", PartyUpdate, true)
 end
 
+local function CreatePartySub(self, unit)
+    self.mystyle = unit
+    self.cfg = cfg.units[unit]
+
+    self:RegisterForClicks("AnyDown")
+
+    self:SetScale(cfg.scale)
+    api:SetBackdrop(self, 2, 2, 2, 2)
+    api:CreateDropShadow(self, 6, 6)
+
+    lum:CreateHealthBar(self, "secondary")
+    lum:CreateMouseoverHighlight(self)
+
+    -- Health
+    self.Health.colorClass = false
+    self.Health.colorClassPet = true
+    self.Health.colorSelection = true
+
+    -- Texts
+    local name = api:CreateFontstring(self.Health, m.fonts.mlang, cfg.fontsize - 2, "THINOUTLINE")
+    name:SetPoint("LEFT", self.Health, 2, 0)
+    name:SetJustifyH("LEFT")
+    name:SetWidth(self.cfg.width / 2)
+    name:SetHeight(cfg.fontsize - 2)
+    self:Tag(name, "[lum:name]")
+    self.Name = name
+
+    lum:CreateHealthValueString(self, m.fonts.font, cfg.fontsize, "THINOUTLINE", -2, 0, "RIGHT")
+
+    -- Heal Prediction
+    lum:CreateHealPrediction(self)
+
+    self.Range = cfg.frames.range
+end
+
+local function CreatePartyTarget(self)
+    return CreatePartySub(self, "partytarget")
+end
+
+local function CreatePartyPet(self)
+    return CreatePartySub(self, "partypet")
+end
+
 -- -----------------------------------
 -- > SPAWN UNIT
 -- -----------------------------------
 if cfg.units[frame].show then
-    oUF:RegisterStyle(A .. frame:gsub("^%l", string.upper), CreateParty)
-    oUF:SetActiveStyle(A .. frame:gsub("^%l", string.upper))
+    oUF:RegisterStyle(A .. "Party", CreateParty)
+    oUF:SetActiveStyle(A .. "Party")
 
     local party = oUF:SpawnHeader("oUF_LumenParty", nil, "party", "showParty",
                                   true, "showRaid", false, "showPlayer", true,
@@ -212,8 +255,42 @@ if cfg.units[frame].show then
                                   "oUF-initialConfigFunction", ([[
   		self:SetHeight(%d)
   		self:SetWidth(%d)
-  	]]):format(cfg.units[frame].height, cfg.units[frame].width)):SetPoint(
-                      cfg.units[frame].pos.a1, cfg.units[frame].pos.af,
-                      cfg.units[frame].pos.a2, cfg.units[frame].pos.x,
-                      cfg.units[frame].pos.y)
+  	]]):format(cfg.units[frame].height, cfg.units[frame].width))
+    party:SetPoint(
+        cfg.units[frame].pos.a1, cfg.units[frame].pos.af,
+        cfg.units[frame].pos.a2, cfg.units[frame].pos.x,
+        cfg.units[frame].pos.y)
+
+    if cfg.units["partytarget"].show then
+        oUF:RegisterStyle(A .. "PartyTarget", CreatePartyTarget)
+        oUF:SetActiveStyle(A .. "PartyTarget")
+
+        local partytarget = oUF:SpawnHeader("oUF_LumenPartyTarget", nil, "party",
+            "showParty", true, "showRaid", false, "showPlayer", true,
+            "yOffset", -5 - cfg.units["party"].height + cfg.units["partytarget"].height,
+            "groupBy", "ASSIGNEDROLE",
+            "groupingOrder", "TANK,HEALER,DAMAGER",
+            "oUF-initialConfigFunction", ([[
+                 self:SetAttribute('unitsuffix', 'target')
+                 self:SetHeight(%d)
+                 self:SetWidth(%d)
+            ]]):format(cfg.units["partytarget"].height, cfg.units["partytarget"].width))
+        partytarget:SetPoint("TOPLEFT", party, "TOPRIGHT", 6, 0)
+    end
+
+    if cfg.units["partypet"].show then
+        oUF:RegisterStyle(A .. "PartyPet", CreatePartyPet)
+        oUF:SetActiveStyle(A .. "PartyPet")
+
+        local partypet = oUF:SpawnHeader("oUF_LumenPartyPet", nil, "party",
+            "showParty", true, "showRaid", false, "showPlayer", true,
+            "yOffset", -5 - cfg.units["party"].height + cfg.units["partypet"].height,
+            "groupBy", "ASSIGNEDROLE", "groupingOrder", "TANK,HEALER,DAMAGER",
+            "oUF-initialConfigFunction", ([[
+                 self:SetAttribute('unitsuffix', 'pet')
+                 self:SetHeight(%d)
+                 self:SetWidth(%d)
+            ]]):format(cfg.units["partypet"].height, cfg.units["partypet"].width))
+        partypet:SetPoint("TOPLEFT", party, "TOPRIGHT", 6, - cfg.units["partytarget"].height - 2)
+    end
 end
