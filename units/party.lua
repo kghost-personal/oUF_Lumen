@@ -187,6 +187,7 @@ local function CreateParty(self)
     lum:CreateThreatBorder(self)
 
     self.Range = cfg.frames.range
+    self.CustomClick = {}
 
     self.Overlay:Raise()
 
@@ -231,6 +232,7 @@ local function CreatePartySub(self, unit)
     lum:CreateHealPrediction(self)
 
     self.Range = cfg.frames.range
+    self.CustomClick = {}
 end
 
 local function CreatePartyTarget(self)
@@ -253,6 +255,7 @@ if cfg.units[frame].show then
                                   "yOffset", -20, "groupBy", "ASSIGNEDROLE",
                                   "groupingOrder", "TANK,HEALER,DAMAGER",
                                   "oUF-initialConfigFunction", ([[
+        self:SetAttribute('*type2', nil)
   		self:SetHeight(%d)
   		self:SetWidth(%d)
   	]]):format(cfg.units[frame].height, cfg.units[frame].width))
@@ -272,6 +275,7 @@ if cfg.units[frame].show then
             "groupingOrder", "TANK,HEALER,DAMAGER",
             "oUF-initialConfigFunction", ([[
                  self:SetAttribute('unitsuffix', 'target')
+                 self:SetAttribute('*type2', nil)
                  self:SetHeight(%d)
                  self:SetWidth(%d)
             ]]):format(cfg.units["partytarget"].height, cfg.units["partytarget"].width))
@@ -288,6 +292,7 @@ if cfg.units[frame].show then
             "groupBy", "ASSIGNEDROLE", "groupingOrder", "TANK,HEALER,DAMAGER",
             "oUF-initialConfigFunction", ([[
                  self:SetAttribute('unitsuffix', 'pet')
+                 self:SetAttribute('*type2', nil)
                  self:SetHeight(%d)
                  self:SetWidth(%d)
             ]]):format(cfg.units["partypet"].height, cfg.units["partypet"].width))
