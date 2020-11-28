@@ -19,6 +19,12 @@ externals:
   embeds/LibCustomGlow:
     url: git://github.com/Stanzilla/LibCustomGlow
     tag: latest
+  embeds/oUF_Dispellable:
+    url: git://github.com/Rainrider/oUF_Dispellable.git
+    tag: latest
+  embeds/LibPlayerSpells:
+    url: git://github.com/AdiAddons/LibPlayerSpells-1.0.git
+    tag: latest
 
 manual-changelog:
   filename: CHANGELOG.md

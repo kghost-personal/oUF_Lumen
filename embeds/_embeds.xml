@@ -1,10 +1,12 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Include file="oUF\oUF.xml" />
 	<Script file="LibStub.lua" />
-	<Script file="LibCustomGlow\LibCustomGlow-1.0.lua" />
+    <Script file="LibCustomGlow\LibCustomGlow-1.0.lua" />
+	<Include file="LibPlayerSpells\lib.xml" />
 	<Script file="oUF_MovableFrames\movable.lua" />
 	<Script file="oUF_Smooth.lua" />
 	<Script file="oUF_Experience\oUF_Experience.lua" />
 	<Script file="oUF_Reputation\oUF_Reputation.lua" />
 	<Script file="oUF_ArtifactPower\oUF_ArtifactPower.lua" />
+	<Script file="oUF_Dispellable\oUF_Dispellable.lua" />
 </Ui>
