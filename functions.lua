@@ -40,8 +40,8 @@ function lum:CreateHealthBar(self, frameType)
 
     health.bg = health:CreateTexture(nil, "BACKGROUND")
     health.bg:SetAllPoints(health)
-    health.bg:SetAlpha(0.05)
     health.bg:SetTexture(m.textures.bg_texture)
+    health.bg.multiplier = .5
 
     health.Smooth = self.cfg.health.smooth
     health.PostUpdate = onPostUpdateHealth
