@@ -98,6 +98,9 @@ local function CreateParty(self)
 
     self.Overlay = CreateFrame("Frame", nil, self)
     self.Overlay:SetAllPoints()
+    self.OutOfCombatOverlay = CreateFrame("Frame", nil, self)
+    self.OutOfCombatOverlay:SetAllPoints()
+    RegisterStateDriver(self.OutOfCombatOverlay, "visibility", "[combat] hide; show")
 
     -- Health & Power
     self.Health.colorClass = false
@@ -112,7 +115,7 @@ local function CreateParty(self)
         self:Tag(self.Name, "[lum:playerstatus] [lum:leader] [raidcolor][lum:name]")
     end
 
-    self.classText = api:CreateFontstring(self.Health, m.fonts.font, cfg.fontsize, "THINOUTLINE")
+    self.classText = api:CreateFontstring(self.OutOfCombatOverlay, m.fonts.font, cfg.fontsize, "THINOUTLINE")
     self.classText:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -4, 5)
     self.classText:SetJustifyH("RIGHT")
     self:Tag(self.classText, "[lum:level] [raidcolor][class]")
@@ -196,7 +199,7 @@ local function CreateParty(self)
     }
 
     -- Group Role Icon
-    local GroupRoleIndicator = lum:CreateGroupRoleIndicator(self.Overlay)
+    local GroupRoleIndicator = lum:CreateGroupRoleIndicator(self.OutOfCombatOverlay)
     GroupRoleIndicator:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 4, 8)
     GroupRoleIndicator:SetSize(12, 12)
     self.GroupRoleIndicator = GroupRoleIndicator
@@ -208,7 +211,7 @@ local function CreateParty(self)
     self.RaidTargetIndicator = RaidTargetIndicator
 
     -- Ready Check Icon
-    local ReadyCheck = self.Overlay:CreateTexture()
+    local ReadyCheck = self.OutOfCombatOverlay:CreateTexture()
     ReadyCheck:SetPoint("CENTER", self, "CENTER", 0, 0)
     ReadyCheck:SetSize(20, 20)
     ReadyCheck.finishedTimer = 10
@@ -228,6 +231,7 @@ local function CreateParty(self)
     self.CustomClick = {}
 
     self.Overlay:Raise()
+    self.OutOfCombatOverlay:Raise()
 
     -- self:RegisterEvent("PLAYER_TALENT_UPDATE", PartyUpdate, true)
     -- self:RegisterEvent("CHARACTER_POINTS_CHANGED", PartyUpdate, true)
