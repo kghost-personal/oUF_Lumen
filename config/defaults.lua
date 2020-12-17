@@ -129,7 +129,7 @@ cfg.elements = {
     },
     altpowerbar = {show = true},
     experiencebar = {
-        show = true,
+        show = false,
         height = 3,
         width = Minimap:GetWidth() + 4,
         pos = {
