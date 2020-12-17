@@ -3,6 +3,7 @@
 ## Version: @project-version@
 ## Title: oUF_|cFF0d87d5L|r|cFF3f6abdu|r|cFF85419cm|r|cFFc81a7de|r|cFFf20269n|r
 ## Notes: oUF layout by greven (Kreoss @ Quel'Thalas EU)
+## OptionalDependencies: Masque
 ## SavedVariables: LumenDB
 ## X-SavedVariables: LumenDB
 ## X-SlashCmdList: /lmf

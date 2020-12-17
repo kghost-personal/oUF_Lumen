@@ -13,19 +13,9 @@ local function PostCreateIcon(self, button)
     local unit = self.__owner.unit
     local frame = self.__owner.mystyle
 
+    lum:CreateMasqueIcon(button, self.size)
+
     if unit == "vehicle" then unit = "player" end
-
-    local count = button.count
-    count:ClearAllPoints()
-    count:SetFont(m.fonts.font, 12, "OUTLINE")
-    count:SetPoint("TOPRIGHT", button, 3, 3)
-
-    button.icon:SetTexCoord(.02, .98, .02, .98)
-
-    button.overlay:SetTexture(m.textures.aura_border)
-    button.overlay:SetTexCoord(0, 1, 0, 1)
-    button.overlay.Hide = function(self) self:SetVertexColor(0.1, 0.1, 0.1) end
-
     -- For player debuffs show the spell name
     if unit == "player" and cfg.units[frame].auras.debuffs.spellName then
         button.spell = button:CreateFontString(nil, "OVERLAY")
