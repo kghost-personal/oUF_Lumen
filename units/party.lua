@@ -161,42 +161,7 @@ local function CreateParty(self)
     end
 
     -- Dispellable
-    local button = CreateFrame('Button', nil, self.Overlay)
-    button:SetPoint('CENTER')
-    button:SetSize(22, 22)
-    button:SetToplevel(true)
-
-    local cd = CreateFrame('Cooldown', '$parentCooldown', button, 'CooldownFrameTemplate')
-    cd:SetHideCountdownNumbers(false) -- set to true to disable cooldown numbers on the cooldown spiral
-    cd:SetAllPoints()
-
-    local icon = button:CreateTexture(nil, 'ARTWORK')
-    icon:SetAllPoints()
-
-    local overlay = button:CreateTexture(nil, 'OVERLAY')
-    overlay:SetTexture('Interface\\Buttons\\UI-Debuff-Overlays')
-    overlay:SetTexCoord(0.296875, 0.5703125, 0, 0.515625)
-    overlay:SetAllPoints()
-
-    local count = button:CreateFontString(nil, 'OVERLAY', 'NumberFontNormal', 1)
-    count:SetPoint('BOTTOMRIGHT', -1, 1)
-
-    local texture = self.Health:CreateTexture(nil, 'OVERLAY')
-    texture:SetTexture('Interface\\ChatFrame\\ChatFrameBackground')
-    texture:SetAllPoints()
-    texture:SetVertexColor(1, 1, 1, 0) -- hide in case the class can't dispel at all
-    texture.dispelAlpha = 0.2
-
-    button.cd = cd
-    button.icon = icon
-    button.overlay = overlay
-    button.count = count
-    button:Hide() -- hide in case the class can't dispel at all
-
-    self.Dispellable = {
-        dispelIcon = button,
-        dispelTexture = texture,
-    }
+    lum:CreateDispellable(self)
 
     -- Group Role Icon
     local GroupRoleIndicator = lum:CreateGroupRoleIndicator(self.OutOfCombatOverlay)
