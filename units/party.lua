@@ -192,6 +192,14 @@ local function CreateParty(self)
     -- Threat warning border
     lum:CreateThreatBorder(self)
 
+    -- Phase indicator
+    self.PhaseIndicator = CreateFrame('Frame', nil, self)
+    self.PhaseIndicator:SetSize(self.cfg.height, self.cfg.height)
+    self.PhaseIndicator:SetPoint('TOPRIGHT', self)
+    self.PhaseIndicator:EnableMouse(true)
+    self.PhaseIndicator.Icon = self.PhaseIndicator:CreateTexture(nil, 'OVERLAY')
+    self.PhaseIndicator.Icon:SetAllPoints()
+
     self.Range = cfg.frames.range
     self.CustomClick = {}
 
