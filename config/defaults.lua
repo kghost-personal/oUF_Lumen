@@ -556,7 +556,42 @@ cfg.units = {
             show = true
         }
     },
-    raid = {show = false},
+    raid = {
+        show = false,
+        width = 80,
+        height = 20,
+        pos = {
+            a1 = "CENTER",
+            a2 = "CENTER",
+            af = "UIParent",
+            x = 550,
+            y = -20
+        },
+        health = {
+            show = true,
+            classColored = true,
+            gradientColored = false,
+            reactionColored = false,
+            invertedColors = true,
+            classColoredText = false,
+            smooth = true
+        },
+        power = {
+            show = true,
+            height = 2,
+            classColored = true,
+            frequentUpdates = false,
+            smooth = true,
+            text = {show = true}
+        },
+        name = {show = true},
+        auras = {
+            buffs = {show = true, spellName = false},
+            debuffs = {show = true, spellName = false}
+        },
+        showPortraits = false,
+        forceRole = false
+    },
     nameplate = {
         show = true,
         width = cfg.frames.nameplate.width,
