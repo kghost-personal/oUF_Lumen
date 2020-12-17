@@ -9,7 +9,7 @@ local core, api = ns.core, ns.api
 local LCG = LibStub("LibCustomGlow-1.0")
 
 local _, PlayerClass = UnitClass("player")
-local PlayerSpec = select(1, GetSpecializationInfo(GetSpecialization()))
+local PlayerSpec = nil
 
 local ButtonGlow_Start = LCG.ButtonGlow_Start
 local ButtonGlow_Stop = LCG.ButtonGlow_Stop
