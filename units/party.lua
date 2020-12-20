@@ -86,6 +86,10 @@ end
 --   print(api:IsPlayerHealer())
 -- end
 
+local function PostCreateIcon(self, button)
+    lum:CreateMasqueIcon(button, self.size)
+end
+
 -- -----------------------------------
 -- > PARTY STYLE
 -- -----------------------------------
@@ -158,6 +162,26 @@ local function CreateParty(self)
         debuffs.CustomFilter = DebuffsCustomFilter
         self.Debuffs = debuffs
     end
+
+    local size = self.cfg.height / 2 - 2
+    local watchers = CreateFrame("Frame", nil, self)
+    watchers:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 2, 2)
+    watchers:SetSize(size * 8, size)
+    watchers.size = size
+    watchers.spacing = 0
+    watchers.initialAnchor = "BOTTOMLEFT"
+    watchers["growth-x"] = "RIGHT"
+    watchers["growth-y"] = "UP"
+    watchers.PostCreateIcon = PostCreateIcon
+    watchers.Watchers = {
+        [48438] = 1,
+        [33763] = 2,
+        [774] = 3,
+        [8936] = 4,
+        [102351] = 5,
+        [155777] = 6
+    }
+    self.Watchers = watchers
 
     -- Dispellable
     lum:CreateDispellable(self)
