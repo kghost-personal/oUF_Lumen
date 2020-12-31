@@ -1,7 +1,6 @@
 local _, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
-                                       ns.G, ns.oUF
+local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
 
 -- Class colors
 function api:RaidColor(unit)
@@ -21,12 +20,10 @@ end
 
 function api:GetUnitAura(unit, spell, filter)
     for index = 1, 40 do
-        local name, _, count, _, duration, expire, caster, _, _, spellID, _, _,
-              _, _, _, value = UnitAura(unit, index, filter)
+        local name, _, count, _, duration, expire, caster, _, _, spellID, _, _, _, _, _, value =
+            UnitAura(unit, index, filter)
         if not name then break end
-        if name and spellID == spell then
-            return name, count, duration, expire, caster, spellID, value
-        end
+        if name and spellID == spell then return name, count, duration, expire, caster, spellID, value end
     end
 end
 
@@ -57,14 +54,10 @@ function api:IsPlayerHealer()
 end
 
 -- Is Player max level?
-function api:IsPlayerMaxLevel()
-    return G.playerLevel == GetMaxPlayerLevel() and true or false
-end
+function api:IsPlayerMaxLevel() return G.playerLevel == GetMaxPlayerLevel() and true or false end
 
-function api:CreateFontstring(frame, font, size, outline, layer, sublayer,
-                              inheritsFrom)
-    local fs = frame:CreateFontString(nil, layer or "OVERLAY", sublayer or 0,
-                                      inheritsFrom or nil)
+function api:CreateFontstring(frame, font, size, outline, layer, sublayer, inheritsFrom)
+    local fs = frame:CreateFontString(nil, layer or "OVERLAY", sublayer or 0, inheritsFrom or nil)
     fs:SetFont(font, size, outline)
     fs:SetShadowColor(0, 0, 0, 1)
     fs:SetShadowOffset(1, -1)
@@ -72,14 +65,9 @@ function api:CreateFontstring(frame, font, size, outline, layer, sublayer,
 end
 
 function api:CreateBorder(self, borderFrame, edgeSize, frameLevel, texture)
-    if borderFrame:GetObjectType() == "Texture" then
-        borderFrame = self:GetParent()
-    end
+    if borderFrame:GetObjectType() == "Texture" then borderFrame = self:GetParent() end
 
-    local backdrop = {
-        edgeFile = texture or "Interface\\ChatFrame\\ChatFrameBackground",
-        edgeSize = edgeSize
-    }
+    local backdrop = {edgeFile = texture or "Interface\\ChatFrame\\ChatFrameBackground", edgeSize = edgeSize}
     borderFrame:SetPoint("TOPLEFT", self, "TOPLEFT", -2, 2)
     borderFrame:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", 2, -2)
     borderFrame:SetBackdrop(backdrop)
@@ -88,8 +76,7 @@ function api:CreateBorder(self, borderFrame, edgeSize, frameLevel, texture)
     borderFrame:Hide()
 end
 
-function api:SetBackdrop(self, insetLeft, insetRight, insetTop, insetBottom,
-                         color)
+function api:SetBackdrop(self, insetLeft, insetRight, insetTop, insetBottom, color)
     local frame = self
 
     if self:GetObjectType() == "Texture" then frame = self:GetParent() end
@@ -105,12 +92,7 @@ function api:SetBackdrop(self, insetLeft, insetRight, insetTop, insetBottom,
             bgFile = "Interface\\ChatFrame\\ChatFrameBackground",
             tile = false,
             tileSize = 0,
-            insets = {
-                left = -insetLeft,
-                right = -insetRight,
-                top = -insetTop,
-                bottom = -insetBottom
-            }
+            insets = {left = -insetLeft, right = -insetRight, top = -insetTop, bottom = -insetBottom}
         }
         backdrop:SetBackdropColor(unpack(color or cfg.colors.backdrop))
         frame.Backdrop = backdrop
@@ -161,8 +143,7 @@ function api:SetInside(frame, anchor, xOffset, yOffset, anchor2)
     api:DisablePixelSnap(frame)
     frame:ClearAllPoints()
     frame:SetPoint("TOPLEFT", anchor, "TOPLEFT", xOffset, -yOffset)
-    frame:SetPoint("BOTTOMRIGHT", anchor2 or anchor, "BOTTOMRIGHT", -xOffset,
-                   yOffset)
+    frame:SetPoint("BOTTOMRIGHT", anchor2 or anchor, "BOTTOMRIGHT", -xOffset, yOffset)
 end
 
 function api:SetOutside(frame, anchor, xOffset, yOffset, anchor2)
@@ -173,8 +154,7 @@ function api:SetOutside(frame, anchor, xOffset, yOffset, anchor2)
     api:DisablePixelSnap(frame)
     frame:ClearAllPoints()
     frame:SetPoint("TOPLEFT", anchor, "TOPLEFT", -xOffset, yOffset)
-    frame:SetPoint("BOTTOMRIGHT", anchor2 or anchor, "BOTTOMRIGHT", xOffset,
-                   -yOffset)
+    frame:SetPoint("BOTTOMRIGHT", anchor2 or anchor, "BOTTOMRIGHT", xOffset, -yOffset)
 end
 
 -- ---------------
@@ -183,9 +163,7 @@ end
 
 local function FaderOnFinished(self) self.__owner:SetAlpha(self.finAlpha) end
 
-local function FaderOnUpdate(self)
-    self.__owner:SetAlpha(self.__animFrame:GetAlpha())
-end
+local function FaderOnUpdate(self) self.__owner:SetAlpha(self.__animFrame:GetAlpha()) end
 
 function api:IsMouseOverFrame(frame)
     if MouseIsOver(frame) then return true end

@@ -1,7 +1,6 @@
 local A, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
-                                       ns.G, ns.oUF
+local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
 
 local _G = _G
 
@@ -76,8 +75,7 @@ local function AddTargetIndicators(self)
 
     -- Targeted Arrow
     if self.cfg.showTargetArrow then
-        self.arrow = api:CreateFontstring(self, m.fonts.symbols_light, 32,
-                                          "THINOUTLINE")
+        self.arrow = api:CreateFontstring(self, m.fonts.symbols_light, 32, "THINOUTLINE")
         self.arrow:SetPoint("CENTER", self, "CENTER", 0, 62)
         self.arrow:SetText("")
         self.arrow:SetTextColor(unpack(selectedColor))
@@ -87,8 +85,7 @@ local function AddTargetIndicators(self)
     if self.cfg.showGlow then
         self.glow = self:CreateTexture(nil, "BACKGROUND", nil, -5)
         self.glow:SetSize(150, 60)
-        self.glow:SetTexture(
-            "Interface\\GLUES\\Models\\UI_Draenei\\GenericGlow64")
+        self.glow:SetTexture("Interface\\GLUES\\Models\\UI_Draenei\\GenericGlow64")
         self.glow:SetVertexColor(0, 0.5, 1)
         self.glow:SetBlendMode("ADD")
         self.glow:SetPoint("CENTER", self, "CENTER", 0, 2)
@@ -109,8 +106,7 @@ end
 
 -- Post Health Update
 local function PostUpdateHealth(health, unit, min, max)
-    local color = CreateColor(oUF:ColorGradient(min, max, 1, 0, 0, 1, 1, 0, 1,
-                                                1, 1))
+    local color = CreateColor(oUF:ColorGradient(min, max, 1, 0, 0, 1, 1, 0, 1, 1, 1))
     health.percent:SetTextColor(color:GetRGB())
 end
 
@@ -138,9 +134,7 @@ end
 local PostUpdatePlates = function(self, event, unit)
     if not self then return end
 
-    if event == "NAME_PLATE_UNIT_ADDED" then
-        self.isPlayer = UnitIsPlayer(unit)
-    end
+    if event == "NAME_PLATE_UNIT_ADDED" then self.isPlayer = UnitIsPlayer(unit) end
 
     if event == "NAME_PLATE_UNIT_ADDED" or event == "PLAYER_TARGET_CHANGED" then
         self.isPlayer = UnitIsPlayer(unit)
@@ -148,16 +142,14 @@ local PostUpdatePlates = function(self, event, unit)
     end
 
     if not self.isPlayer then
-        lum:CreateNameString(self, m.fonts.mlang, cfg.fontsize - 5, "THINOUTLINE", 0, 4,
-                             "CENTER", self.cfg.width - 4)
+        lum:CreateNameString(self, m.fonts.mlang, cfg.fontsize - 5, "THINOUTLINE", 0, 4, "CENTER", self.cfg.width - 4)
         self:Tag(self.Name, "[lum:levelplus] [lum:name]")
     end
 end
 
 local function CreateNameplateClassPower(self)
     if cfg.units.nameplate.classpower.show then
-        classPower = api:CreateFontstring(self.Health, m.fonts.font, cfg.fontsize - 2,
-                                          "THINOUTLINE", "BACKGROUND")
+        classPower = api:CreateFontstring(self.Health, m.fonts.font, cfg.fontsize - 2, "THINOUTLINE", "BACKGROUND")
         classPower:SetPoint("RIGHT", self.Health, "LEFT", -4, 0)
         classPower:SetJustifyH("RIGHT")
         classPower:SetWidth(self.cfg.width)
@@ -190,8 +182,7 @@ local function CreateNameplate(self, unit)
 
     local health = lum:CreateHealthBar(self, "nameplate")
     health:SetAllPoints()
-    health.percent = api:CreateFontstring(self.Health, m.fonts.font, cfg.fontsize - 4,
-                                          "THINOUTLINE", "BACKGROUND")
+    health.percent = api:CreateFontstring(self.Health, m.fonts.font, cfg.fontsize - 4, "THINOUTLINE", "BACKGROUND")
     health.percent:SetPoint("LEFT", self.Health, "RIGHT", 4, 0)
     health.percent:SetJustifyH("LEFT")
     health.percent:SetWidth(self.cfg.width)
@@ -209,8 +200,7 @@ local function CreateNameplate(self, unit)
     AddTargetIndicators(self)
 
     -- Auras
-    local debuffs = lum:SetDebuffAuras(self, frame, 6, 1, 16, 4, "BOTTOMLEFT",
-                                       self, "TOPLEFT", 0, 8, "BOTTOMLEFT",
+    local debuffs = lum:SetDebuffAuras(self, frame, 6, 1, 16, 4, "BOTTOMLEFT", self, "TOPLEFT", 0, 8, "BOTTOMLEFT",
                                        "RIGHT", "UP", true, true)
     debuffs.PostCreateIcon = PostCreateIcon
 end

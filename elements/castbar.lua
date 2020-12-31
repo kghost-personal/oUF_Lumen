@@ -1,7 +1,6 @@
 local _, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
-                                       ns.G, ns.oUF
+local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
 
 local format = string.format
 
@@ -15,8 +14,7 @@ local function SetHearthstoneBindingLocation(self, unit)
 
     if core:HasValue(G.hearthstones, self.spellID) then
         local bindLocation = GetBindLocation()
-        self.Text:SetText(format("%s - |cff888888%s|r", self.Text:GetText(),
-                                 bindLocation))
+        self.Text:SetText(format("%s - |cff888888%s|r", self.Text:GetText(), bindLocation))
     end
 end
 
@@ -29,8 +27,7 @@ local function CheckForSpellInterrupt(self, unit)
         self:SetStatusBarColor(0.2, 0.2, 0.2)
 
         if self.Glowborder then
-            self.Glowborder:SetBackdropBorderColor(25 / 255, 200 / 255,
-                                                   255 / 255, 1)
+            self.Glowborder:SetBackdropBorderColor(25 / 255, 200 / 255, 255 / 255, 1)
             self.Glowborder:Show()
         end
     else
@@ -44,11 +41,7 @@ end
 local function CustomCastTimeText(self, duration)
     local unit = self.__owner.mystyle
 
-    if self.Time then
-        self.Time:SetText(("%.1f"):format(
-                              self.channeling and duration or self.max -
-                                  duration))
-    end
+    if self.Time then self.Time:SetText(("%.1f"):format(self.channeling and duration or self.max - duration)) end
 
     if self.Max and unit ~= "nameplate" then
         self.Max:SetText(("%.1f "):format(self.max))
@@ -79,9 +72,7 @@ local function OnPostCastFail(self, unit)
     if self.Max then self.Max:Hide() end
 end
 
-local function OnPostCastInterruptible(self, unit)
-    CheckForSpellInterrupt(self, unit)
-end
+local function OnPostCastInterruptible(self, unit) CheckForSpellInterrupt(self, unit) end
 
 -- Castbar generator
 function lum:CreateCastbar(self)
@@ -129,17 +120,12 @@ function lum:CreateCastbar(self)
     Castbar.Max = Max
 
     if (unit == "player") then
-        api:SetBackdrop(Castbar, cfg.units.player.castbar.height + 4, 2, 2, 2,
-                        backdropColor)
+        api:SetBackdrop(Castbar, cfg.units.player.castbar.height + 4, 2, 2, 2, backdropColor)
         Castbar:SetStatusBarColor(unpack(cfg.units.player.castbar.color))
-        Castbar:SetWidth(cfg.units.player.castbar.width -
-                             cfg.units.player.castbar.height + 6)
+        Castbar:SetWidth(cfg.units.player.castbar.width - cfg.units.player.castbar.height + 6)
         Castbar:SetHeight(cfg.units.player.castbar.height)
-        Castbar:SetPoint(cfg.units.player.castbar.pos.a1,
-                         cfg.units.player.castbar.pos.af,
-                         cfg.units.player.castbar.pos.a2,
-                         cfg.units.player.castbar.pos.x,
-                         cfg.units.player.castbar.pos.y)
+        Castbar:SetPoint(cfg.units.player.castbar.pos.a1, cfg.units.player.castbar.pos.af,
+                         cfg.units.player.castbar.pos.a2, cfg.units.player.castbar.pos.x, cfg.units.player.castbar.pos.y)
 
         Text:SetFont(m.fonts.font, cfg.fontsize + 1, "THINOUTLINE")
         Text:SetWidth(cfg.units.player.castbar.width - 60)
@@ -164,8 +150,7 @@ function lum:CreateCastbar(self)
     elseif (unit == "target") then
         api:SetBackdrop(Castbar, cfg.units.target.castbar.height + 4, 2, 2, 2)
         Castbar:SetStatusBarColor(unpack(cfg.units.target.castbar.color))
-        Castbar:SetWidth(cfg.units.target.castbar.width -
-                             cfg.units.target.castbar.height + 6)
+        Castbar:SetWidth(cfg.units.target.castbar.width - cfg.units.target.castbar.height + 6)
         Castbar:SetHeight(cfg.units.target.castbar.height)
         Castbar:SetPoint("CENTER", "UIParent", "CENTER", 0, 320)
 
@@ -182,8 +167,7 @@ function lum:CreateCastbar(self)
     elseif (unit == "focus") then
         api:SetBackdrop(Castbar, cfg.units.focus.castbar.height + 4, 2, 2, 2)
         Castbar:SetStatusBarColor(unpack(cfg.units.focus.castbar.color))
-        Castbar:SetWidth(cfg.units.focus.castbar.width -
-                             cfg.units.focus.castbar.height + 6)
+        Castbar:SetWidth(cfg.units.focus.castbar.width - cfg.units.focus.castbar.height + 6)
         Castbar:SetHeight(cfg.units.focus.castbar.height)
         Castbar:SetPoint("CENTER", "UIParent", "CENTER", 0, 280)
 
@@ -200,8 +184,7 @@ function lum:CreateCastbar(self)
     elseif (unit == "boss") then
         api:SetBackdrop(Castbar, cfg.units.boss.castbar.height + 8, 2, 2, 2)
         Castbar:SetStatusBarColor(unpack(cfg.units.boss.castbar.color))
-        Castbar:SetWidth(cfg.units.boss.castbar.width -
-                             cfg.units.boss.castbar.height + 6)
+        Castbar:SetWidth(cfg.units.boss.castbar.width - cfg.units.boss.castbar.height + 6)
         Castbar:SetHeight(cfg.units.boss.castbar.height)
         Castbar:SetPoint("TOPLEFT", self, 0, 0)
         Castbar:SetPoint("BOTTOMRIGHT", self, 0, 0)
@@ -242,8 +225,7 @@ function lum:CreateCastbar(self)
 
     -- Non Interruptable glow
     lum:SetGlowBorder(Castbar)
-    Castbar.Glowborder:SetPoint("TOPLEFT", Castbar, "TOPLEFT",
-                                -(Castbar:GetHeight() + 2) - 6, 6)
+    Castbar.Glowborder:SetPoint("TOPLEFT", Castbar, "TOPLEFT", -(Castbar:GetHeight() + 2) - 6, 6)
 
     Castbar.PostCastStart = onPostCastStart
     Castbar.PostCastFail = OnPostCastFail

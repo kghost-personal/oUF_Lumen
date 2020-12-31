@@ -5,8 +5,7 @@
 -- ------------------------------------------------------------------------
 local _, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
-                                       ns.G, ns.oUF
+local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
 
 -- -----------------------------------
 -- > Shared Style Function
@@ -17,11 +16,9 @@ function lum:SharedStyle(self, frameType)
 
     self:RegisterForClicks("AnyDown")
 
-    if style ~= "party" and style ~= "raid" and style ~= "boss" and style ~=
-        "arena" then
+    if style ~= "party" and style ~= "raid" and style ~= "boss" and style ~= "arena" then
         self:SetSize(self.cfg.width, self.cfg.height)
-        self:SetPoint(self.cfg.pos.a1, self.cfg.pos.af, self.cfg.pos.a2,
-                      self.cfg.pos.x, self.cfg.pos.y)
+        self:SetPoint(self.cfg.pos.a1, self.cfg.pos.af, self.cfg.pos.a2, self.cfg.pos.x, self.cfg.pos.y)
     end
 
     self:SetScale(cfg.scale)

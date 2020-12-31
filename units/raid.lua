@@ -1,7 +1,6 @@
 local A, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
-                                       ns.G, ns.oUF
+local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
 
 local frame = "raid"
 
@@ -12,9 +11,7 @@ local frame = "raid"
 -- Post Health Update
 local PostUpdateHealth = function(health, unit, min, max)
     local self = health.__owner
-    local dead, disconnnected, ghost = UnitIsDead(unit),
-                                       not UnitIsConnected(unit),
-                                       UnitIsGhost(unit)
+    local dead, disconnnected, ghost = UnitIsDead(unit), not UnitIsConnected(unit), UnitIsGhost(unit)
     local perc = math.floor(min / max * 100 + 0.5)
 
     -- Inverted colors
@@ -26,8 +23,7 @@ local PostUpdateHealth = function(health, unit, min, max)
 
     -- Use gradient colored health
     if cfg.units[frame].health.gradientColored then
-        local color = CreateColor(oUF.ColorGradient(min, max, 1, 0, 0, 1, 1, 0,
-                                                    .5, .9, 0))
+        local color = CreateColor(oUF.ColorGradient(min, max, 1, 0, 0, 1, 1, 0, .5, .9, 0))
         health:SetStatusBarColor(color:GetRGB())
     end
 
@@ -56,9 +52,7 @@ end
 
 -- PostUpdate Power
 local PostUpdatePower = function(power, unit, min, max)
-    local dead, disconnnected, ghost = UnitIsDead(unit),
-                                       not UnitIsConnected(unit),
-                                       UnitIsGhost(unit)
+    local dead, disconnnected, ghost = UnitIsDead(unit), not UnitIsConnected(unit), UnitIsGhost(unit)
 
     if disconnnected or dead or ghost then
         power:SetValue(max)
@@ -71,9 +65,7 @@ local PostUpdatePower = function(power, unit, min, max)
         end
     else
         power:SetValue(min)
-        if (unit == "vehicle") then
-            power:SetStatusBarColor(143 / 255, 194 / 255, 32 / 255)
-        end
+        if (unit == "vehicle") then power:SetStatusBarColor(143 / 255, 194 / 255, 32 / 255) end
     end
 end
 
@@ -142,10 +134,7 @@ local function CreateRide(self)
     button.count = count
     button:Hide() -- hide in case the class can't dispel at all
 
-    self.Dispellable = {
-        dispelIcon = button,
-        dispelTexture = texture,
-    }
+    self.Dispellable = {dispelIcon = button, dispelTexture = texture}
 
     -- Group Role Icon
     local GroupRoleIndicator = lum:CreateGroupRoleIndicator(self.Overlay)
@@ -189,22 +178,13 @@ if cfg.units[frame].show then
     oUF:RegisterStyle(A .. "Raid", CreateRide)
     oUF:SetActiveStyle(A .. "Raid")
 
-    local raid = oUF:SpawnHeader(
-        "oUF_LumenParty", nil, "raid",
-        "groupBy", "GROUP",
-        "groupingOrder", "1,2,3,4,5,6,7,8",
-        "unitsPerColumn", 5,
-        "showParty", false,
-        "showPlayer", true,
-        "showRaid", true,
-        "yOffset", -5,
-        "oUF-initialConfigFunction", ([[
+    local raid = oUF:SpawnHeader("oUF_LumenParty", nil, "raid", "groupBy", "GROUP", "groupingOrder", "1,2,3,4,5,6,7,8",
+                                 "unitsPerColumn", 5, "showParty", false, "showPlayer", true, "showRaid", true,
+                                 "yOffset", -5, "oUF-initialConfigFunction", ([[
             self:SetAttribute('*type2', nil)
             self:SetHeight(%d)
             self:SetWidth(%d)
         ]]):format(cfg.units[frame].height, cfg.units[frame].width))
-    raid:SetPoint(
-        cfg.units[frame].pos.a1, cfg.units[frame].pos.af,
-        cfg.units[frame].pos.a2, cfg.units[frame].pos.x,
-        cfg.units[frame].pos.y)
+    raid:SetPoint(cfg.units[frame].pos.a1, cfg.units[frame].pos.af, cfg.units[frame].pos.a2, cfg.units[frame].pos.x,
+                  cfg.units[frame].pos.y)
 end

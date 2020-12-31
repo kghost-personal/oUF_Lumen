@@ -21,5 +21,8 @@ embeds/oUF_Reputation
 embeds/oUF_ArtifactPower
 embeds/LibCustomGlow
 
+# Release
+/.release/
+
 # Other
 .vscode/

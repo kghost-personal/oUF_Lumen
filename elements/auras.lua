@@ -1,7 +1,6 @@
 local _, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
-                                       ns.G, ns.oUF
+local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
 
 local max = max
 
@@ -30,8 +29,7 @@ local function PostCreateIcon(self, button)
 end
 
 local function PostUpdateIcon(icons, unit, icon, index)
-    local name, _, _, _, duration, expirationTime =
-        UnitAura(unit, index, icon.filter)
+    local name, _, _, _, duration, expirationTime = UnitAura(unit, index, icon.filter)
 
     if (icon.spell) then icon.spell:SetText(name) end
 end

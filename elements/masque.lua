@@ -1,10 +1,25 @@
 local _, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
-                                       ns.G, ns.oUF
+local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
 
 local MSQ = LibStub("Masque", true)
-local MSQ_ButtonData = { AutoCast = false, AutoCastable = false, Border = false, Checked = false, Cooldown = false, Count = false, Duration = false, Disabled = false, Flash = false, Highlight = false, HotKey = false, Icon = false, Name = false, Normal = false, Pushed = false }
+local MSQ_ButtonData = {
+    AutoCast = false,
+    AutoCastable = false,
+    Border = false,
+    Checked = false,
+    Cooldown = false,
+    Count = false,
+    Duration = false,
+    Disabled = false,
+    Flash = false,
+    Highlight = false,
+    HotKey = false,
+    Icon = false,
+    Name = false,
+    Normal = false,
+    Pushed = false
+}
 
 local GroupAura = MSQ:Group("Lumen", "Aura")
 

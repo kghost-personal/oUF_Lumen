@@ -1,7 +1,6 @@
 local _, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
-                                       ns.G, ns.oUF
+local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
 
 local max = max
 
@@ -34,9 +33,7 @@ local function OnUpdate(self, elapsed)
         end
 
         if cfg.elements.barTimers.colorGradient then
-            local color = CreateColor(oUF:ColorGradient(self.timeLeft,
-                                                        self.duration, 1, 0.2,
-                                                        0.2, 1, 0.75, 0.25, 0.2,
+            local color = CreateColor(oUF:ColorGradient(self.timeLeft, self.duration, 1, 0.2, 0.2, 1, 0.75, 0.25, 0.2,
                                                         0.2, 0.2))
             self.bar:SetStatusBarColor(color:GetRGB())
         end
@@ -44,8 +41,7 @@ local function OnUpdate(self, elapsed)
 end
 
 local PostUpdateBar = function(element, unit, button, index)
-    local name, _, count, dtype, duration, expirationTime =
-        UnitAura(unit, index, button.filter)
+    local name, _, count, dtype, duration, expirationTime = UnitAura(unit, index, button.filter)
 
     if duration and duration > 0 then
         button.timeLeft = expirationTime - GetTime()
@@ -64,15 +60,13 @@ local PostUpdateBar = function(element, unit, button, index)
                     button.bar:SetStatusBarColor(unpack(oUF.colors.debuff.none))
                 end
             else
-                button.bar:SetStatusBarColor(
-                    unpack(cfg.elements.barTimers.defaultDebuffColor))
+                button.bar:SetStatusBarColor(unpack(cfg.elements.barTimers.defaultDebuffColor))
             end
         else -- Buffs
             if cfg.elements.barTimers.colorBuffsByClass then
                 button.bar:SetStatusBarColor(unpack(api:RaidColor(unit)))
             else
-                button.bar:SetStatusBarColor(
-                    unpack(cfg.elements.barTimers.defaultBuffColor))
+                button.bar:SetStatusBarColor(unpack(cfg.elements.barTimers.defaultBuffColor))
             end
         end
     else
@@ -87,11 +81,7 @@ local PostUpdateBar = function(element, unit, button, index)
     button:SetScript("OnUpdate", OnUpdate)
 end
 
-local function SortAuras(a, b)
-    if a and b and a.timeLeft and b.timeLeft then
-        return a.timeLeft > b.timeLeft
-    end
-end
+local function SortAuras(a, b) if a and b and a.timeLeft and b.timeLeft then return a.timeLeft > b.timeLeft end end
 
 local function PreSetPosition(self)
     table.sort(self, SortAuras)
@@ -103,9 +93,7 @@ local function PostCreateBar(self, button)
 
     button.overlay:SetTexture(m.textures.aura_border)
     button.overlay:SetTexCoord(0, 1, 0, 1)
-    button.overlay.Hide = function(self)
-        self:SetVertexColor(0.15, 0.15, 0.15)
-    end
+    button.overlay.Hide = function(self) self:SetVertexColor(0.15, 0.15, 0.15) end
 
     button.bar = CreateFrame("StatusBar", nil, button)
     button.bar:SetStatusBarTexture(m.textures.status_texture)

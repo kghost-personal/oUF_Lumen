@@ -92,13 +92,7 @@ cfg.frames = {
             height = 1.5 -- Height of the Power Bar
         }
     },
-    nameplate = {
-        width = 120,
-        height = 6,
-        margin = 10,
-        health = {margin = 0},
-        power = {height = 1.5}
-    },
+    nameplate = {width = 120, height = 6, margin = 10, health = {margin = 0}, power = {height = 1.5}},
     playerplate = {show = false, width = 182, height = 2},
     shadow = {
         show = true, -- Use frame drop shadows
@@ -115,13 +109,7 @@ cfg.elements = {
     castbar = {
         backdrop = {color = {0, 0, 0, 0.9}},
         timeToHold = 1.5,
-        fader = {
-            fadeInAlpha = 1,
-            fadeInDuration = 0.1,
-            fadeOutAlpha = 0,
-            fadeOutDuration = 0.3,
-            fadeOutDelay = 0.5
-        }
+        fader = {fadeInAlpha = 1, fadeInDuration = 0.1, fadeOutAlpha = 0, fadeOutDuration = 0.3, fadeOutDelay = 0.5}
     },
     spellwatchers = {
         show = true,
@@ -132,25 +120,13 @@ cfg.elements = {
         show = false,
         height = 3,
         width = Minimap:GetWidth() + 4,
-        pos = {
-            a1 = "TOPLEFT",
-            a2 = "BOTTOMLEFT",
-            af = "Minimap",
-            x = -2,
-            y = -12
-        }
+        pos = {a1 = "TOPLEFT", a2 = "BOTTOMLEFT", af = "Minimap", x = -2, y = -12}
     },
     artifactpowerbar = {
         show = true,
         height = 3,
         width = Minimap:GetWidth() + 4,
-        pos = {
-            a1 = "TOPLEFT",
-            a2 = "BOTTOMLEFT",
-            af = "Minimap",
-            x = -2,
-            y = -24
-        }
+        pos = {a1 = "TOPLEFT", a2 = "BOTTOMLEFT", af = "Minimap", x = -2, y = -24}
     },
     barTimers = {
         theme = "thin", -- Theme can be `thin` or `normal`,
@@ -188,13 +164,7 @@ cfg.units = {
         show = true,
         width = cfg.frames.main.width,
         height = cfg.frames.main.height,
-        pos = {
-            a1 = "LEFT",
-            a2 = "BOTTOM",
-            af = "UIParent",
-            x = cfg.frames.main.pos.x,
-            y = cfg.frames.main.pos.y
-        },
+        pos = {a1 = "LEFT", a2 = "BOTTOM", af = "UIParent", x = cfg.frames.main.pos.x, y = cfg.frames.main.pos.y},
         health = {
             show = true,
             classColored = false,
@@ -224,16 +194,9 @@ cfg.units = {
         },
         castbar = {
             enable = false,
-            pos = {
-                a1 = "BOTTOMLEFT",
-                a2 = "TOPLEFT",
-                af = "MultiBarBottomLeft",
-                x = cfg.frames.main.height + 4,
-                y = -4
-            },
+            pos = {a1 = "BOTTOMLEFT", a2 = "TOPLEFT", af = "MultiBarBottomLeft", x = cfg.frames.main.height + 4, y = -4},
             color = {5 / 255, 107 / 255, 246 / 255},
-            width = (cfg.frames.main.width + 2) * 2 + cfg.frames.main.margin -
-                cfg.frames.main.height + 8,
+            width = (cfg.frames.main.width + 2) * 2 + cfg.frames.main.margin - cfg.frames.main.height + 8,
             height = cfg.frames.main.height,
             latency = {show = true, color = {1, 0, 0, 0.4}}
         },
@@ -243,24 +206,13 @@ cfg.units = {
             barTimers = {show = true}
         },
         visibility = "[mod][combat][harm,nodead] show; [indoors,resting][flying] hide; show",
-        fader = {
-            fadeInAlpha = 1,
-            fadeInDuration = 0.3,
-            fadeOutAlpha = 0,
-            fadeOutDuration = 0.3
-        }
+        fader = {fadeInAlpha = 1, fadeInDuration = 0.3, fadeOutAlpha = 0, fadeOutDuration = 0.3}
     },
     target = {
         show = true,
         width = cfg.frames.main.width,
         height = cfg.frames.main.height,
-        pos = {
-            a1 = "BOTTOMLEFT",
-            a2 = "BOTTOMRIGHT",
-            af = "oUF_LumenPlayer",
-            x = cfg.frames.main.margin,
-            y = 0
-        },
+        pos = {a1 = "BOTTOMLEFT", a2 = "BOTTOMRIGHT", af = "oUF_LumenPlayer", x = cfg.frames.main.margin, y = 0},
         health = {
             show = true,
             classColored = true,
@@ -289,24 +241,13 @@ cfg.units = {
             debuffs = {show = false, spellName = false},
             barTimers = {show = true}
         },
-        fader = {
-            fadeInAlpha = 1,
-            fadeInDuration = 0.3,
-            fadeOutAlpha = 0,
-            fadeOutDuration = 0.3
-        }
+        fader = {fadeInAlpha = 1, fadeInDuration = 0.3, fadeOutAlpha = 0, fadeOutDuration = 0.3}
     },
     targettarget = {
         show = true,
         width = cfg.frames.secondary.width,
         height = cfg.frames.secondary.height,
-        pos = {
-            a1 = "BOTTOMRIGHT",
-            a2 = "TOPRIGHT",
-            af = "oUF_LumenTarget",
-            x = 0,
-            y = cfg.frames.secondary.margin
-        },
+        pos = {a1 = "BOTTOMRIGHT", a2 = "TOPRIGHT", af = "oUF_LumenTarget", x = 0, y = cfg.frames.secondary.margin},
         health = {
             show = true,
             classColored = true,
@@ -324,28 +265,14 @@ cfg.units = {
             text = {show = true}
         },
         name = {show = true},
-        auras = {
-            buffs = {show = false, spellName = false},
-            debuffs = {show = false, spellName = false}
-        },
-        fader = {
-            fadeInAlpha = 1,
-            fadeInDuration = 0.3,
-            fadeOutAlpha = 0,
-            fadeOutDuration = 0.3
-        }
+        auras = {buffs = {show = false, spellName = false}, debuffs = {show = false, spellName = false}},
+        fader = {fadeInAlpha = 1, fadeInDuration = 0.3, fadeOutAlpha = 0, fadeOutDuration = 0.3}
     },
     focus = {
         show = true,
         width = cfg.frames.secondary.width,
         height = cfg.frames.secondary.height,
-        pos = {
-            a1 = "BOTTOMRIGHT",
-            a2 = "TOPRIGHT",
-            af = "oUF_LumenPlayer",
-            x = 0,
-            y = cfg.frames.secondary.margin
-        },
+        pos = {a1 = "BOTTOMRIGHT", a2 = "TOPRIGHT", af = "oUF_LumenPlayer", x = 0, y = cfg.frames.secondary.margin},
         health = {
             show = true,
             classColored = true,
@@ -369,28 +296,14 @@ cfg.units = {
             width = 282,
             height = cfg.frames.main.height
         },
-        auras = {
-            buffs = {show = false, spellName = false},
-            debuffs = {show = false, spellName = false}
-        },
-        fader = {
-            fadeInAlpha = 1,
-            fadeInDuration = 0.3,
-            fadeOutAlpha = 0,
-            fadeOutDuration = 0.3
-        }
+        auras = {buffs = {show = false, spellName = false}, debuffs = {show = false, spellName = false}},
+        fader = {fadeInAlpha = 1, fadeInDuration = 0.3, fadeOutAlpha = 0, fadeOutDuration = 0.3}
     },
     pet = {
         show = true,
         width = cfg.frames.secondary.width,
         height = cfg.frames.secondary.height,
-        pos = {
-            a1 = "BOTTOMLEFT",
-            a2 = "TOPLEFT",
-            af = "oUF_LumenPlayer",
-            x = 0,
-            y = cfg.frames.secondary.margin
-        },
+        pos = {a1 = "BOTTOMLEFT", a2 = "TOPLEFT", af = "oUF_LumenPlayer", x = 0, y = cfg.frames.secondary.margin},
         health = {
             show = true,
             classColored = false,
@@ -408,29 +321,16 @@ cfg.units = {
             text = {show = true}
         },
         name = {show = true},
-        auras = {
-            buffs = {show = true, filter = true},
-            debuffs = {show = false, spellName = false}
-        },
+        auras = {buffs = {show = true, filter = true}, debuffs = {show = false, spellName = false}},
         visibility = "[petbattle][overridebar][vehicleui][possessbar][shapeshift][channeling] hide; [pet,mod][pet,harm][pet,combat] show; hide",
-        fader = {
-            fadeInAlpha = 1,
-            fadeInDuration = 0.3,
-            fadeOutAlpha = 0,
-            fadeOutDuration = 0.3
-        }
+        fader = {fadeInAlpha = 1, fadeInDuration = 0.3, fadeOutAlpha = 0, fadeOutDuration = 0.3}
     },
     boss = {
         show = true,
         width = 200,
         height = 28,
         pos = {a1 = "RIGHT", a2 = "CENTER", af = "UIParent", x = 700, y = 200},
-        health = {
-            show = true,
-            gradientColored = false,
-            reactionColored = true,
-            smooth = true
-        },
+        health = {show = true, gradientColored = false, reactionColored = true, smooth = true},
         power = {
             show = true,
             height = cfg.frames.secondary.power.height,
@@ -446,10 +346,7 @@ cfg.units = {
             width = 200,
             height = cfg.frames.main.height
         },
-        auras = {
-            buffs = {show = false, spellName = false},
-            debuffs = {show = false, spellName = false}
-        }
+        auras = {buffs = {show = false, spellName = false}, debuffs = {show = false, spellName = false}}
     },
     arena = {
         show = true,
@@ -473,22 +370,13 @@ cfg.units = {
             text = {show = true}
         },
         name = {show = true},
-        auras = {
-            buffs = {show = false, spellName = false},
-            debuffs = {show = false, spellName = false}
-        }
+        auras = {buffs = {show = false, spellName = false}, debuffs = {show = false, spellName = false}}
     },
     party = {
         show = true,
         width = 164,
         height = 40,
-        pos = {
-            a1 = "CENTER",
-            a2 = "CENTER",
-            af = "UIParent",
-            x = 550,
-            y = -20
-        },
+        pos = {a1 = "CENTER", a2 = "CENTER", af = "UIParent", x = 550, y = -20},
         health = {
             show = true,
             classColored = true,
@@ -507,10 +395,7 @@ cfg.units = {
             text = {show = true}
         },
         name = {show = true},
-        auras = {
-            buffs = {show = true, spellName = false},
-            debuffs = {show = true, spellName = false}
-        },
+        auras = {buffs = {show = true, spellName = false}, debuffs = {show = true, spellName = false}},
         showPortraits = false,
         forceRole = false
     },
@@ -527,13 +412,8 @@ cfg.units = {
             classColoredText = false,
             smooth = true
         },
-        power = {
-            show = false,
-            height = 0
-        },
-        name = {
-            show = true
-        }
+        power = {show = false, height = 0},
+        name = {show = true}
     },
     partypet = {
         show = true,
@@ -548,25 +428,14 @@ cfg.units = {
             classColoredText = false,
             smooth = true
         },
-        power = {
-            show = false,
-            height = 0
-        },
-        name = {
-            show = true
-        }
+        power = {show = false, height = 0},
+        name = {show = true}
     },
     raid = {
         show = false,
         width = 80,
         height = 20,
-        pos = {
-            a1 = "CENTER",
-            a2 = "CENTER",
-            af = "UIParent",
-            x = 550,
-            y = -20
-        },
+        pos = {a1 = "CENTER", a2 = "CENTER", af = "UIParent", x = 550, y = -20},
         health = {
             show = true,
             classColored = true,
@@ -585,10 +454,7 @@ cfg.units = {
             text = {show = true}
         },
         name = {show = true},
-        auras = {
-            buffs = {show = true, spellName = false},
-            debuffs = {show = true, spellName = false}
-        },
+        auras = {buffs = {show = true, spellName = false}, debuffs = {show = true, spellName = false}},
         showPortraits = false,
         forceRole = false
     },
@@ -615,15 +481,8 @@ cfg.units = {
         },
         name = {show = true},
         classpower = {show = true},
-        auras = {
-            buffs = {show = false, filter = false},
-            debuffs = {show = true, spellName = false}
-        },
-        castbar = {
-            enable = true,
-            color = {5 / 255, 107 / 255, 246 / 255},
-            height = 2
-        },
+        auras = {buffs = {show = false, filter = false}, debuffs = {show = true, spellName = false}},
+        castbar = {enable = true, color = {5 / 255, 107 / 255, 246 / 255}, height = 2},
         selectedColor = {255 / 255, 25 / 255, 25 / 255, 0.8},
         glowColor = {50 / 255, 240 / 255, 210 / 255, 0.7},
         showTargetArrow = false,
@@ -634,13 +493,7 @@ cfg.units = {
         show = cfg.frames.playerplate.show,
         width = cfg.frames.playerplate.width,
         height = cfg.frames.playerplate.height,
-        pos = {
-            a1 = "BOTTOM",
-            a2 = "BOTTOM",
-            af = "UIParent",
-            x = 0,
-            y = cfg.frames.main.pos.y + 4
-        },
+        pos = {a1 = "BOTTOM", a2 = "BOTTOM", af = "UIParent", x = 0, y = cfg.frames.main.pos.y + 4},
         health = {
             show = true,
             classColored = false,
@@ -658,21 +511,9 @@ cfg.units = {
             text = {show = true}
         },
         name = {show = true},
-        classpower = {
-            show = true,
-            pos = {a1 = "TOPLEFT", a2 = "BOTTOMLEFT", x = 0, y = -7},
-            height = 2
-        },
-        auras = {
-            buffs = {show = false, spellName = false},
-            debuffs = {show = false, spellName = false}
-        },
+        classpower = {show = true, pos = {a1 = "TOPLEFT", a2 = "BOTTOMLEFT", x = 0, y = -7}, height = 2},
+        auras = {buffs = {show = false, spellName = false}, debuffs = {show = false, spellName = false}},
         visibility = "[mod:alt][harm,nodead][combat][group,noflying] show; hide;",
-        fader = {
-            fadeInAlpha = 1,
-            fadeInDuration = 0.3,
-            fadeOutAlpha = 0,
-            fadeOutDuration = 0.3
-        }
+        fader = {fadeInAlpha = 1, fadeInDuration = 0.3, fadeOutAlpha = 0, fadeOutDuration = 0.3}
     }
 }

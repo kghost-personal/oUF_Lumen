@@ -1,7 +1,6 @@
 local A, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
-                                       ns.G, ns.oUF
+local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
 
 local frame = "focus"
 
@@ -14,15 +13,12 @@ local PostUpdateHealth = function(health, unit, min, max)
     local self = health.__owner
 
     if cfg.units[frame].health.gradientColored then
-        local color = CreateColor(oUF.ColorGradient(min, max, 1, 0, 0, 1, 1, 0,
-                                                    unpack(api:RaidColor(unit))))
+        local color = CreateColor(oUF.ColorGradient(min, max, 1, 0, 0, 1, 1, 0, unpack(api:RaidColor(unit))))
         health:SetStatusBarColor(color:GetRGB())
     end
 
     -- Class colored text
-    if cfg.units[frame].health.classColoredText then
-        self.Name:SetTextColor(unpack(api:RaidColor(unit)))
-    end
+    if cfg.units[frame].health.classColoredText then self.Name:SetTextColor(unpack(api:RaidColor(unit))) end
 end
 
 -- -----------------------------------
@@ -36,8 +32,7 @@ local function CreateFocus(self)
     lum:SharedStyle(self, "secondary")
 
     -- Texts
-    lum:CreateNameString(self, m.fonts.mlang, cfg.fontsize - 2, "THINOUTLINE", 3, 0,
-                         "LEFT", self.cfg.width - 4)
+    lum:CreateNameString(self, m.fonts.mlang, cfg.fontsize - 2, "THINOUTLINE", 3, 0, "LEFT", self.cfg.width - 4)
     self:Tag(self.Name, "[lum:name]")
 
     -- Health & Power Updates
@@ -60,12 +55,9 @@ if cfg.units[frame].show then
     -- Frame Visibility
     if cfg.units[frame].visibility then
         f:Disable()
-        RegisterAttributeDriver(f, "state-visibility",
-                                cfg.units[frame].visibility)
+        RegisterAttributeDriver(f, "state-visibility", cfg.units[frame].visibility)
     end
 
     -- Fader
-    if cfg.units[frame].fader then
-        api:CreateFrameFader(f, cfg.units[frame].fader)
-    end
+    if cfg.units[frame].fader then api:CreateFrameFader(f, cfg.units[frame].fader) end
 end

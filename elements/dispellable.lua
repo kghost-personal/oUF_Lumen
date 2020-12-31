@@ -1,8 +1,6 @@
-
 local _, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
-                                       ns.G, ns.oUF
+local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
 
 function lum:CreateDispellable(self)
     local button = CreateFrame('Button', nil, self.Overlay)
@@ -34,8 +32,5 @@ function lum:CreateDispellable(self)
 
     lum:CreateMasqueIcon(button, 22)
 
-    self.Dispellable = {
-        dispelIcon = button,
-        dispelTexture = texture,
-    }
+    self.Dispellable = {dispelIcon = button, dispelTexture = texture}
 end

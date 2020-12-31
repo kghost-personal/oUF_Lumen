@@ -1,7 +1,6 @@
 local _, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
-                                       ns.G, ns.oUF
+local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
 
 -- ------------------------------------------------------------------------
 -- > Tags
@@ -89,8 +88,7 @@ local _tags = {
     -- Health Value
     hpvalue = function(unit)
         local min = UnitHealth(unit)
-        if min == 0 or not UnitIsConnected(unit) or UnitIsGhost(unit) or
-            UnitIsDead(unit) then return "" end
+        if min == 0 or not UnitIsConnected(unit) or UnitIsGhost(unit) or UnitIsDead(unit) then return "" end
         return core:ShortNumber(min)
     end,
     -- Health Percent
@@ -107,20 +105,15 @@ local _tags = {
     -- Power value
     powervalue = function(unit)
         -- Hide it if DC, Ghost or Dead!
-        local min, max = UnitPower(unit, UnitPowerType(unit)),
-                         UnitPowerMax(unit, UnitPowerType(unit))
-        if min == 0 or not UnitIsConnected(unit) or UnitIsGhost(unit) or
-            UnitIsDead(unit) then return "" end
+        local min, max = UnitPower(unit, UnitPowerType(unit)), UnitPowerMax(unit, UnitPowerType(unit))
+        if min == 0 or not UnitIsConnected(unit) or UnitIsGhost(unit) or UnitIsDead(unit) then return "" end
 
-        if min == max and cfg.frames.main.power.text.hideMax then
-            return ""
-        end
+        if min == max and cfg.frames.main.power.text.hideMax then return "" end
 
         local _, ptype = UnitPowerType(unit)
         if ptype == "MANA" then
             return floor(min / max * 100) .. "%"
-        elseif ptype == "RAGE" or ptype == "RUNIC_POWER" or ptype ==
-            "LUNAR_POWER" then
+        elseif ptype == "RAGE" or ptype == "RUNIC_POWER" or ptype == "LUNAR_POWER" then
             return floor(min / 10 + 0.5)
         elseif ptype == "INSANITY" then
             return floor(min / 100 + 0.5)
@@ -171,24 +164,18 @@ local _tags = {
             RequireSpec = SPEC_MAGE_ARCANE
         end
 
-        local powerID = unit == "vehicle" and SPELL_POWER_COMBO_POINTS or
-                            ClassPowerID
+        local powerID = unit == "vehicle" and SPELL_POWER_COMBO_POINTS or ClassPowerID
         local powerType = unit == "vehicle" and "COMBO_POINTS" or ClassPowerType
 
-        if RequireSpec and RequireSpec ~= GetSpecialization() or not powerID then
-            return
-        end
+        if RequireSpec and RequireSpec ~= GetSpecialization() or not powerID then return end
 
         local cur = UnitPower("player", powerID)
         local max = UnitPowerMax("player", powerID)
-        local color, maxColor = oUF.colors.power[powerType],
-                                oUF.colors.power.max[powerType]
+        local color, maxColor = oUF.colors.power[powerType], oUF.colors.power.max[powerType]
 
         if cur == max then color = maxColor end
 
-        if cur and cur > 0 then
-            return format("%s%d|r", core:ToHex(color), cur)
-        end
+        if cur and cur > 0 then return format("%s%d|r", core:ToHex(color), cur) end
     end,
     role = function(unit)
         local Role = UnitGroupRolesAssigned(unit)
@@ -202,9 +189,7 @@ local _tags = {
 
         return String
     end,
-    leader = function(unit)
-        return UnitIsGroupLeader(unit) and "|cffffff00!|r"
-    end,
+    leader = function(unit) return UnitIsGroupLeader(unit) and "|cffffff00!|r" end,
     afkdnd = function(unit)
         if UnitIsAFK(unit) then
             return "|cffCFCFCF " .. AFK .. "|r"

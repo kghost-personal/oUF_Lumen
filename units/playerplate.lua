@@ -1,7 +1,6 @@
 local A, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
-                                       ns.G, ns.oUF
+local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
 
 local frame = "playerplate"
 local frameName = A .. "PlayerPlate"
@@ -19,8 +18,7 @@ local function CreatePlayerPlate(self, unit)
     self:EnableMouse(false)
 
     self:SetSize(self.cfg.width, self.cfg.height)
-    self:SetPoint(self.cfg.pos.a1, self.cfg.pos.af, self.cfg.pos.a2,
-                  self.cfg.pos.x, self.cfg.pos.y)
+    self:SetPoint(self.cfg.pos.a1, self.cfg.pos.af, self.cfg.pos.a2, self.cfg.pos.x, self.cfg.pos.y)
     self:SetScale(cfg.scale)
 
     api:SetBackdrop(self, 1.5, 1.5, 1.5, 1.5)
@@ -28,8 +26,7 @@ local function CreatePlayerPlate(self, unit)
 
     local power = lum:CreatePowerBar(self, "nameplate")
     power:SetAllPoints(self)
-    lum:CreatePowerValueString(self, m.fonts.font, cfg.fontsize - 2, "THINOUTLINE", 0,
-                               0, "CENTER")
+    lum:CreatePowerValueString(self, m.fonts.font, cfg.fontsize - 2, "THINOUTLINE", 0, 0, "CENTER")
 
     lum:CreateClassPower(self)
     lum:CreatePowerPrediction(self)
@@ -37,9 +34,8 @@ local function CreatePlayerPlate(self, unit)
     lum:CreateSpellWatchers(self)
 
     -- Auras
-    lum:SetBuffAuras(self, frame, 7, 1, cfg.frames.secondary.height + 4, 2,
-                     "TOPLEFT", self, "BOTTOMLEFT", 0, -8, "BOTTOMLEFT",
-                     "RIGHT", "DOWN", true)
+    lum:SetBuffAuras(self, frame, 7, 1, cfg.frames.secondary.height + 4, 2, "TOPLEFT", self, "BOTTOMLEFT", 0, -8,
+                     "BOTTOMLEFT", "RIGHT", "DOWN", true)
 end
 
 -- -----------------------------------
@@ -53,12 +49,9 @@ if cfg.units[frame].show then
     -- Frame Visibility
     if cfg.units[frame].visibility then
         f:Disable()
-        RegisterAttributeDriver(f, "state-visibility",
-                                cfg.units[frame].visibility)
+        RegisterAttributeDriver(f, "state-visibility", cfg.units[frame].visibility)
     end
 
     -- Fader
-    if cfg.units[frame].fader then
-        api:CreateFrameFader(f, cfg.units[frame].fader)
-    end
+    if cfg.units[frame].fader then api:CreateFrameFader(f, cfg.units[frame].fader) end
 end

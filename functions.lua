@@ -1,7 +1,6 @@
 local _, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m,
-                                       ns.G, ns.oUF
+local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
 local filters, debuffs, watchers = ns.filters, ns.debuffs, ns.watchers
 
 local UnitAura, UnitPowerType = UnitAura, UnitPowerType
@@ -15,23 +14,19 @@ local onPostUpdateHealth = function(health, unit, min, max)
     local frame = self.mystyle
 
     if cfg.units[frame].health.gradientColored then
-        local color = CreateColor(oUF:ColorGradient(min, max, 1, 0, 0, 1, 1, 0,
-                                                    unpack(api:RaidColor(unit))))
+        local color = CreateColor(oUF:ColorGradient(min, max, 1, 0, 0, 1, 1, 0, unpack(api:RaidColor(unit))))
         health:SetStatusBarColor(color:GetRGB())
     end
 
     -- Class colored text
-    if cfg.units[frame].health.classColoredText then
-        self.Name:SetTextColor(unpack(api:RaidColor(unit)))
-    end
+    if cfg.units[frame].health.classColoredText then self.Name:SetTextColor(unpack(api:RaidColor(unit))) end
 end
 
 function lum:CreateHealthBar(self, frameType)
     if not self.cfg.health.show then return end
 
     local health = CreateFrame("StatusBar", nil, self)
-    health:SetHeight(self.cfg.height - cfg.frames[frameType].health.margin -
-                         self.cfg.power.height)
+    health:SetHeight(self.cfg.height - cfg.frames[frameType].health.margin - self.cfg.power.height)
     health:SetWidth(self.cfg.width)
     health:SetPoint("TOP")
     health:SetStatusBarTexture(m.textures.status_texture)
@@ -196,8 +191,7 @@ function lum:CreatePowerBar(self, frameType)
     power:SetWidth(self.cfg.width)
     power:SetStatusBarTexture(m.textures.status_texture)
     power:GetStatusBarTexture():SetHorizTile(false)
-    power:SetPoint("TOP", self.Health, "BOTTOM", 0,
-                   -cfg.frames[frameType].health.margin)
+    power:SetPoint("TOP", self.Health, "BOTTOM", 0, -cfg.frames[frameType].health.margin)
 
     power.bg = power:CreateTexture(nil, "BACKGROUND")
     power.bg:SetAllPoints(power)
@@ -252,8 +246,7 @@ function lum:CreateAdditionalPower(self)
     local gap = -18
     local r, g, b = unpack(oUF.colors.power[ADDITIONAL_POWER_BAR_NAME])
 
-    local AdditionalPower = CreateFrame("StatusBar", nil, self,
-                                        "BackdropTemplate")
+    local AdditionalPower = CreateFrame("StatusBar", nil, self, "BackdropTemplate")
     AdditionalPower:SetStatusBarTexture(m.textures.status_texture)
     AdditionalPower:GetStatusBarTexture():SetHorizTile(false)
     AdditionalPower:SetSize(self.cfg.width, self.cfg.additionalpower.height)
@@ -265,8 +258,7 @@ function lum:CreateAdditionalPower(self)
         api:SetBackdrop(AdditionalPower, 1.5, 1.5, 1.5, 1.5)
     else
         -- If power is not showing position the additional power below health
-        AdditionalPower:SetPoint("TOP", self.Health, "BOTTOM", 0,
-                                 -cfg.frames.main.health.margin)
+        AdditionalPower:SetPoint("TOP", self.Health, "BOTTOM", 0, -cfg.frames.main.health.margin)
     end
 
     local bg = AdditionalPower:CreateTexture(nil, "BACKGROUND")
@@ -274,8 +266,7 @@ function lum:CreateAdditionalPower(self)
     bg:SetTexture(m.textures.bg_texture)
     bg:SetVertexColor(r * 0.25, g * 0.25, b * 0.25)
 
-    local PowerValue = api:CreateFontstring(AdditionalPower, m.fonts.font,
-                                            cfg.fontsize - 3, "THINOUTLINE")
+    local PowerValue = api:CreateFontstring(AdditionalPower, m.fonts.font, cfg.fontsize - 3, "THINOUTLINE")
     PowerValue:SetPoint("CENTER", AdditionalPower, 0, 0)
     PowerValue:SetJustifyH("CENTER")
     self:Tag(PowerValue, "[lum:altpower]")
@@ -361,14 +352,10 @@ function lum:CreatePowerPrediction(self)
         altBar:SetStatusBarColor(r, g, b, 0.4)
         altBar:SetPoint("TOP")
         altBar:SetPoint("BOTTOM")
-        altBar:SetPoint("RIGHT", self.AdditionalPower:GetStatusBarTexture(),
-                        "RIGHT")
+        altBar:SetPoint("RIGHT", self.AdditionalPower:GetStatusBarTexture(), "RIGHT")
     end
 
-    self.PowerPrediction = {
-        mainBar = mainBar and mainBar,
-        altBar = altBar and altBar
-    }
+    self.PowerPrediction = {mainBar = mainBar and mainBar, altBar = altBar and altBar}
 end
 
 -- -----------------------------------
@@ -388,8 +375,7 @@ function lum:CreateSwing(self)
 
     local bar = CreateFrame("StatusBar", nil, self)
     bar:SetSize(self.Castbar:GetWidth() + self.Castbar:GetHeight() + 2, 2)
-    bar:SetPoint("TOPLEFT", self.Castbar, "BOTTOMLEFT",
-                 -(self.Castbar:GetHeight() + 2), -2)
+    bar:SetPoint("TOPLEFT", self.Castbar, "BOTTOMLEFT", -(self.Castbar:GetHeight() + 2), -2)
 
     local two = CreateFrame("StatusBar", nil, bar)
     two:Hide()
@@ -424,18 +410,14 @@ end
 -- > Auras
 -- -----------------------------------
 
-function lum:SetBuffAuras(self, frame, numAuras, numRows, size, spacing, anchor,
-                          parent, parentAnchor, posX, posY, initialAnchor,
-                          growthX, growthY, showStealableBuffs)
+function lum:SetBuffAuras(self, frame, numAuras, numRows, size, spacing, anchor, parent, parentAnchor, posX, posY,
+                          initialAnchor, growthX, growthY, showStealableBuffs)
     if not cfg.units[frame].auras.buffs.show then return end
 
     local PlayerCustomFilter = function(...)
         local spellID = select(13, ...)
         if spellID then
-            if filters["ALL"].buffs[spellID] or
-                filters[G.playerClass].buffs[spellID] then
-                return true
-            end
+            if filters["ALL"].buffs[spellID] or filters[G.playerClass].buffs[spellID] then return true end
         end
     end
 
@@ -452,22 +434,17 @@ function lum:SetBuffAuras(self, frame, numAuras, numRows, size, spacing, anchor,
     return buffs
 end
 
-function lum:SetDebuffAuras(self, frame, numAuras, numRows, size, spacing,
-                            anchor, parent, parentAnchor, posX, posY,
-                            initialAnchor, growthX, growthY, showDebuffType,
-                            onlyShowPlayer)
+function lum:SetDebuffAuras(self, frame, numAuras, numRows, size, spacing, anchor, parent, parentAnchor, posX, posY,
+                            initialAnchor, growthX, growthY, showDebuffType, onlyShowPlayer)
     if not cfg.units[frame].auras.debuffs.show then return end
 
     -- Debuffs filter (Blacklist)
-    local CustomFilter = function(element, unit, button, name, _, _, _,
-                                  duration, _, _, _, _, spellID)
+    local CustomFilter = function(element, unit, button, name, _, _, _, duration, _, _, _, _, spellID)
         if onlyShowPlayer and not button.isPlayer then return false end
 
         if not debuffs.list[frame] or not spellID then return true end
 
-        if debuffs.list[frame][spellID] or duration == 0 then
-            return false
-        end
+        if debuffs.list[frame][spellID] or duration == 0 then return false end
         return true
     end
 
@@ -483,33 +460,23 @@ function lum:SetDebuffAuras(self, frame, numAuras, numRows, size, spacing,
     return debuffs
 end
 
-function lum:SetBarTimerAuras(self, frame, numAuras, numRows, size, spacing,
-                              anchor, parent, parentAnchor, posX, posY,
+function lum:SetBarTimerAuras(self, frame, numAuras, numRows, size, spacing, anchor, parent, parentAnchor, posX, posY,
                               initialAnchor, growthY)
     if not cfg.units[frame].auras.barTimers.show then return end
 
     local PlayerCustomFilter = function(...)
         local spellID = select(13, ...)
         if spellID then
-            if filters["ALL"].buffs[spellID] or
-                filters[G.playerClass].buffs[spellID] then
-                return true
-            end
+            if filters["ALL"].buffs[spellID] or filters[G.playerClass].buffs[spellID] then return true end
         end
     end
 
-    local TargetCustomFilter = function(element, unit, button, name, _, _, _,
-                                        duration, _, _, _, _, spellID)
-        if spellID then
-            if (filters[G.playerClass].debuffs[spellID] and button.isPlayer) then
-                return true
-            end
-        end
+    local TargetCustomFilter = function(element, unit, button, name, _, _, _, duration, _, _, _, _, spellID)
+        if spellID then if (filters[G.playerClass].debuffs[spellID] and button.isPlayer) then return true end end
     end
 
     local barTimers = lum:CreateBarTimer(self, numAuras, numRows, size, spacing)
-    barTimers:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -2,
-                       cfg.frames.secondary.height + 16)
+    barTimers:SetPoint("BOTTOMLEFT", self, "TOPLEFT", -2, cfg.frames.secondary.height + 16)
     barTimers.initialAnchor = "BOTTOMLEFT"
     barTimers["growth-y"] = "UP"
 
@@ -654,8 +621,7 @@ local function CreateClassPower(self)
     local ClassPower = {}
 
     for i = 1, 10 do
-        local Bar = CreateFrame("StatusBar", "oUF_LumenClassPower" .. self.unit,
-                                self, "BackdropTemplate")
+        local Bar = CreateFrame("StatusBar", "oUF_LumenClassPower" .. self.unit, self, "BackdropTemplate")
         Bar:SetHeight(cfg.units[frame].classpower.height)
         Bar:SetStatusBarTexture(m.textures.status_texture)
         api:SetBackdrop(Bar, 1.5, 1.5, 1.5, 1.5)
@@ -691,11 +657,9 @@ local function CreateRuneBar(self)
     Runes.colorSpec = true
 
     for i = 1, 6 do
-        local Rune = CreateFrame("StatusBar", "oUF_LumenRuneBar" .. self.unit,
-                                 self, "BackdropTemplate")
+        local Rune = CreateFrame("StatusBar", "oUF_LumenRuneBar" .. self.unit, self, "BackdropTemplate")
         local numRunes, maxWidth, gap = 6, cfg.units[frame].width, 6
-        local width = ((maxWidth / numRunes) -
-                          (((numRunes - 1) * gap) / numRunes))
+        local width = ((maxWidth / numRunes) - (((numRunes - 1) * gap) / numRunes))
 
         Rune:SetSize(width, cfg.units[frame].classpower.height)
         Rune:SetStatusBarTexture(m.textures.status_texture)
@@ -750,8 +714,7 @@ local function AltPowerPostUpdate(self, unit, cur, min, max)
     self:SetStatusBarColor(r, g, b)
     if cur < max then
         if self.isMouseOver then
-            self.Text:SetFormattedText("%s / %s - %d%%", core:ShortNumber(cur),
-                                       core:ShortNumber(max),
+            self.Text:SetFormattedText("%s / %s - %d%%", core:ShortNumber(cur), core:ShortNumber(max),
                                        core:NumberToPerc(cur, max))
         elseif cur > 0 then
             self.Text:SetFormattedText("%s", core:ShortNumber(cur))
@@ -791,8 +754,7 @@ function lum:CreateAlternativePower(self)
         AlternativePower:SetWidth(200)
         AlternativePower:SetPoint("CENTER", "UIParent", "CENTER", 0, 350)
 
-        AlternativePower.Text = api:CreateFontstring(AlternativePower, m.fonts.font, 10,
-                                                     "THINOUTLINE")
+        AlternativePower.Text = api:CreateFontstring(AlternativePower, m.fonts.font, 10, "THINOUTLINE")
         AlternativePower.Text:SetPoint("CENTER", 0, 0)
 
         local AlternativePowerBG = AlternativePower:CreateTexture(nil, "BORDER")
@@ -817,8 +779,7 @@ function lum:CreatePlayerIconIndicators(self)
     if not self.Health then return end
 
     -- Combat indicator
-    local Combat =
-        api:CreateFontstring(self, m.fonts.symbols, 18, "THINOUTLINE")
+    local Combat = api:CreateFontstring(self, m.fonts.symbols, 18, "THINOUTLINE")
     Combat:SetPoint("RIGHT", self, "LEFT", -10, 0)
     Combat:SetText("")
     Combat:SetTextColor(255 / 255, 26 / 255, 48 / 255, 0.9)
@@ -826,8 +787,7 @@ function lum:CreatePlayerIconIndicators(self)
 
     -- Resting
     if not api:IsPlayerMaxLevel() then
-        local Resting = api:CreateFontstring(self.Health, m.fonts.font,
-                                             cfg.fontsize - 2, "THINOUTLINE")
+        local Resting = api:CreateFontstring(self.Health, m.fonts.font, cfg.fontsize - 2, "THINOUTLINE")
         Resting:SetPoint("CENTER", self.Health, "TOP", 0, 1)
         Resting:SetText("zZz")
         Resting:SetTextColor(255 / 255, 255 / 255, 255 / 255, 0.80)
@@ -837,8 +797,7 @@ end
 
 function lum:CreateTargetIconIndicators(self)
     -- Quest Icon
-    local QuestIcon = api:CreateFontstring(self.Health, m.fonts.symbols, 18,
-                                           "THINOUTLINE")
+    local QuestIcon = api:CreateFontstring(self.Health, m.fonts.symbols, 18, "THINOUTLINE")
     QuestIcon:SetPoint("LEFT", self.Health, "RIGHT", 8, 0)
     QuestIcon:SetText("")
     QuestIcon:SetTextColor(238 / 255, 217 / 255, 43 / 255)
@@ -863,8 +822,7 @@ local function UpdateRoleIcon(self, event)
     -- Show roles when testing
     if role == "NONE" and cfg.units.party.forceRole then
         local rnd = random(1, 3)
-        role = rnd == 1 and "TANK" or
-                   (rnd == 2 and "HEALER" or (rnd == 3 and "DAMAGER"))
+        role = rnd == 1 and "TANK" or (rnd == 2 and "HEALER" or (rnd == 3 and "DAMAGER"))
     end
 
     if UnitIsConnected(self.unit) and role ~= "NONE" then
@@ -921,8 +879,7 @@ function lum:CreateHealthValueString(self, font, size, outline, x, y, point)
 end
 
 -- Health Percent
-function lum:CreateHealthPercentString(self, font, size, outline, x, y, point,
-                                       layer)
+function lum:CreateHealthPercentString(self, font, size, outline, x, y, point, layer)
     if not self.Health then return end
 
     local health = self.Health
@@ -974,22 +931,14 @@ local function UpdateExperienceTooltip(self)
     rested = math.floor(rested / max * 100 + 0.5)
 
     if isHonor then
-        GameTooltip:SetText(string.format("Honor Rank %s",
-                                          UnitHonorLevel("player")))
-        GameTooltip:AddLine(string.format("|cffff4444%s / %s Points|r",
-                                          BreakUpLargeNumbers(cur),
+        GameTooltip:SetText(string.format("Honor Rank %s", UnitHonorLevel("player")))
+        GameTooltip:AddLine(string.format("|cffff4444%s / %s Points|r", BreakUpLargeNumbers(cur),
                                           BreakUpLargeNumbers(max)))
-        GameTooltip:AddLine(string.format(
-                                "|cffffffff%.1f bars|r, |cff2581e9%s%% rested|r",
-                                bars, rested))
+        GameTooltip:AddLine(string.format("|cffffffff%.1f bars|r, |cff2581e9%s%% rested|r", bars, rested))
         GameTooltip:Show()
     else
-        GameTooltip:SetText(string.format("%s / %s (%s%%)",
-                                          BreakUpLargeNumbers(cur),
-                                          BreakUpLargeNumbers(max), per))
-        GameTooltip:AddLine(string.format(
-                                "|cffffffff%.1f bars|r, |cff2581e9%s%% rested|r",
-                                bars, rested))
+        GameTooltip:SetText(string.format("%s / %s (%s%%)", BreakUpLargeNumbers(cur), BreakUpLargeNumbers(max), per))
+        GameTooltip:AddLine(string.format("|cffffffff%.1f bars|r, |cff2581e9%s%% rested|r", bars, rested))
         GameTooltip:Show()
     end
 end
@@ -1016,8 +965,7 @@ local function UpdateReputationTooltip(self)
     local color = FACTION_BAR_COLORS[standing]
 
     if name and isParagon then
-        local currentValue, threshold = C_Reputation.GetFactionParagonInfo(
-                                            factionID)
+        local currentValue, threshold = C_Reputation.GetFactionParagonInfo(factionID)
 
         if currentValue and threshold then
             min, max = 0, threshold
@@ -1026,16 +974,13 @@ local function UpdateReputationTooltip(self)
         end
 
         GameTooltip:AddLine(format("|cff%02x%02x%02x%s|r", 0, 100, 255, name))
-        GameTooltip:AddLine(format("|cffcecece%s:|r |cffb7b7b7%d / %d|r",
-                                   _G["FACTION_STANDING_LABEL" .. standing],
+        GameTooltip:AddLine(format("|cffcecece%s:|r |cffb7b7b7%d / %d|r", _G["FACTION_STANDING_LABEL" .. standing],
                                    value, max - min))
         GameTooltip:Show()
     else
         if name and color then
-            GameTooltip:AddLine(format("|cff%02x%02x%02x%s|r", color.r * 255,
-                                       color.g * 255, color.b * 255, name))
-            GameTooltip:AddLine(format("|cffcecece%s:|r |cffb7b7b7%d / %d|r",
-                                       _G["FACTION_STANDING_LABEL" .. standing],
+            GameTooltip:AddLine(format("|cff%02x%02x%02x%s|r", color.r * 255, color.g * 255, color.b * 255, name))
+            GameTooltip:AddLine(format("|cffcecece%s:|r |cffb7b7b7%d / %d|r", _G["FACTION_STANDING_LABEL" .. standing],
                                        value - min, max - min))
             GameTooltip:Show()
         end
@@ -1047,10 +992,8 @@ function lum:CreateExperienceBar(self)
     if cfg.elements.experiencebar.show then
         local Experience = CreateFrame("StatusBar", nil, self)
         Experience:SetStatusBarTexture(m.textures.status_texture)
-        Experience:SetPoint(cfg.elements.experiencebar.pos.a1,
-                            cfg.elements.experiencebar.pos.af,
-                            cfg.elements.experiencebar.pos.a2,
-                            cfg.elements.experiencebar.pos.x,
+        Experience:SetPoint(cfg.elements.experiencebar.pos.a1, cfg.elements.experiencebar.pos.af,
+                            cfg.elements.experiencebar.pos.a2, cfg.elements.experiencebar.pos.x,
                             cfg.elements.experiencebar.pos.y)
         Experience:SetHeight(cfg.elements.experiencebar.height)
         Experience:SetWidth(cfg.elements.experiencebar.width)
@@ -1080,10 +1023,8 @@ function lum:CreateReputationBar(self)
     if cfg.elements.experiencebar.show then
         local Reputation = CreateFrame("StatusBar", nil, self)
         Reputation:SetStatusBarTexture(m.textures.status_texture)
-        Reputation:SetPoint(cfg.elements.experiencebar.pos.a1,
-                            cfg.elements.experiencebar.pos.af,
-                            cfg.elements.experiencebar.pos.a2,
-                            cfg.elements.experiencebar.pos.x,
+        Reputation:SetPoint(cfg.elements.experiencebar.pos.a1, cfg.elements.experiencebar.pos.af,
+                            cfg.elements.experiencebar.pos.a2, cfg.elements.experiencebar.pos.x,
                             cfg.elements.experiencebar.pos.y)
         Reputation:SetHeight(cfg.elements.experiencebar.height)
         Reputation:SetWidth(cfg.elements.experiencebar.width)
@@ -1109,10 +1050,8 @@ function lum:CreateArtifactPowerBar(self)
         local ArtifactPower = CreateFrame("StatusBar", nil, self)
         ArtifactPower:SetStatusBarTexture(m.textures.status_texture)
         ArtifactPower:SetStatusBarColor(217 / 255, 205 / 255, 145 / 255)
-        ArtifactPower:SetPoint(cfg.elements.artifactpowerbar.pos.a1,
-                               cfg.elements.artifactpowerbar.pos.af,
-                               cfg.elements.artifactpowerbar.pos.a2,
-                               cfg.elements.artifactpowerbar.pos.x,
+        ArtifactPower:SetPoint(cfg.elements.artifactpowerbar.pos.a1, cfg.elements.artifactpowerbar.pos.af,
+                               cfg.elements.artifactpowerbar.pos.a2, cfg.elements.artifactpowerbar.pos.x,
                                cfg.elements.artifactpowerbar.pos.y)
         ArtifactPower:SetHeight(cfg.elements.artifactpowerbar.height)
         ArtifactPower:SetWidth(cfg.elements.artifactpowerbar.width)

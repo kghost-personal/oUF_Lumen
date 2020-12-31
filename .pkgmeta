@@ -6,7 +6,7 @@ externals:
     tag: latest
   embeds/oUF_MovableFrames:
     url: git://github.com/oUF-wow/oUF_MovableFrames
-    tag: latest
+    tag: 1.18
   embeds/oUF_Experience:
     url: git://github.com/p3lim-wow/oUF_Experience
     tag: latest

@@ -1,7 +1,6 @@
 -- ------------------------------------------------------------------------
 -- > SpellWatchers: Watch class spells
 -- ------------------------------------------------------------------------
-
 local _, ns = ...
 local oUF = ns.oUF
 local core, api = ns.core, ns.api
@@ -19,14 +18,12 @@ local PixelGlow_Stop = LCG.PixelGlow_Stop
 -- Pixel Glow (color, number, frequency, length, thickness, xOffset, yOffset, border, key)
 local pixelGlowConfig = {api:RaidColor("player"), 10, 0.25, 6, 1, -5, -5}
 
-local function GetPlayerSpec()
-    return select(1, GetSpecializationInfo(GetSpecialization()))
-end
+local function GetPlayerSpec() return select(1, GetSpecializationInfo(GetSpecialization())) end
 
 local function ShouldUpdateSpecSpells(self, event)
     local element = self.SpellWatchers
-    if not element.__spells or PlayerSpec ~= GetPlayerSpec() or event ==
-        "PLAYER_ENTERING_WORLD" or event == "PLAYER_LOGIN" then
+    if not element.__spells or PlayerSpec ~= GetPlayerSpec() or event == "PLAYER_ENTERING_WORLD" or event ==
+        "PLAYER_LOGIN" then
         PlayerSpec = GetPlayerSpec()
         return true
     else
@@ -61,8 +58,7 @@ local function UpdateSpellState(button, spellID, auraID, altID, texture, glow)
     local isUsable, notEnoughMana = IsUsableSpell(spellID)
     local start, duration = GetSpellCooldown(spellID)
     local count = GetSpellCount(spellID)
-    local charges, maxCharges, chargeStart, chargeDuration =
-        GetSpellCharges(spellID)
+    local charges, maxCharges, chargeStart, chargeDuration = GetSpellCharges(spellID)
 
     local expirationTime
     local isAuraActive = false
@@ -112,9 +108,7 @@ local function UpdateSpellState(button, spellID, auraID, altID, texture, glow)
         button.count:SetTextColor(1, 1, 1)
         button.icon:SetDesaturated(false)
 
-        if not auraID and (glow and glow.type == "pixel") then
-            PixelGlow_Stop(button.glow)
-        end
+        if not auraID and (glow and glow.type == "pixel") then PixelGlow_Stop(button.glow) end
     elseif count and count > 0 then
         button.count:SetTextColor(1, 1, 1)
     elseif start and duration > 1.5 then
@@ -133,21 +127,13 @@ local function UpdateSpellState(button, spellID, auraID, altID, texture, glow)
 
     -- Button Overlay Glow for procs
     if isAuraActive then
-        if glow and glow.type == "button" then
-            ButtonGlow_Start(button.glow)
-        end
+        if glow and glow.type == "button" then ButtonGlow_Start(button.glow) end
 
-        if glow and glow.type == "pixel" then
-            PixelGlow_Start(button.glow, unpack(pixelGlowConfig))
-        end
+        if glow and glow.type == "pixel" then PixelGlow_Start(button.glow, unpack(pixelGlowConfig)) end
     else
-        if auraID and (glow and glow.type == "button") then
-            ButtonGlow_Stop(button.glow)
-        end
+        if auraID and (glow and glow.type == "button") then ButtonGlow_Stop(button.glow) end
 
-        if auraID and (glow and glow.type == "pixel") then
-            PixelGlow_Stop(button.glow)
-        end
+        if auraID and (glow and glow.type == "pixel") then PixelGlow_Stop(button.glow) end
     end
 
     -- If spell is not learned, fade it
@@ -193,9 +179,7 @@ local function UpdateSpellState(button, spellID, auraID, altID, texture, glow)
         end
     end
 
-    if (element.PostUpdateSpell) then
-        element:PostUpdateSpell(button, expirationTime)
-    end
+    if (element.PostUpdateSpell) then element:PostUpdateSpell(button, expirationTime) end
 end
 
 local function CreateSpellButton(element, index)
@@ -284,9 +268,7 @@ local function UpdateSpellButton(self, event, index)
 
         UpdateSpellState(button, spellID, auraID, altID, true, glow)
 
-        if (element.PostUpdateButton) then
-            element:PostUpdateButton(button)
-        end
+        if (element.PostUpdateButton) then element:PostUpdateButton(button) end
     end
 end
 
@@ -397,8 +379,7 @@ local function VisibilityPath(self, ...)
     return (self.SpellWatchers.OverrideVisibility or Visibility)(self, ...)
 end
 
-local function ForceUpdate(element) return
-    Update(element.__owner, "ForceUpdate") end
+local function ForceUpdate(element) return Update(element.__owner, "ForceUpdate") end
 
 do
     function SpellWatchersEnable(self)
