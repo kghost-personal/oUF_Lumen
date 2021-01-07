@@ -2,8 +2,79 @@ local _, ns = ...
 
 local core = CreateFrame("Frame") -- Core methods
 ns.core = core
+ns.Frames = {}
 
 local floor, mod = floor, mod
+
+local LSM = LibStub("LibSharedMedia-3.0")
+ns.LSM = LSM
+LSM:Register("font", "BigNoodleTitling", [[Interface\Addons\oUF_Lumen\media\font.ttc]])
+
+local Ace3 = LibStub("AceAddon-3.0"):NewAddon("Lumen", "AceConsole-3.0")
+ns.Ace3 = Ace3
+
+local OptionBase = {
+    name = "Lumen",
+    handler = Ace3,
+    type = 'group',
+    args = {
+        BaseFont = {
+            type = 'select',
+            dialogControl = 'LSM30_Font',
+            name = 'Font',
+            desc = 'Basic font',
+            values = LSM:HashTable("font"),
+            arg = function() return Ace3.db.profile, "font" end,
+            get = "GetOption",
+            set = "SetOption"
+        },
+        LocalizationFont = {
+            type = 'select',
+            dialogControl = 'LSM30_Font',
+            name = 'Localization font',
+            desc = 'Localization font for display localized strings, like player names',
+            values = LSM:HashTable("font"),
+            arg = function() return Ace3.db.profile, "mfont" end,
+            get = "GetOption",
+            set = "SetOption"
+        }
+    }
+}
+
+local defaults = {profile = {mfont = "BigNoodleTitling", font = "BigNoodleTitling"}}
+
+function Ace3:GetOption(info)
+    local dict, name = info.arg()
+    return dict[name]
+end
+
+function Ace3:SetOption(info, key)
+    local dict, name = info.arg()
+    dict[name] = key
+end
+
+function Ace3:OnInitialize()
+    Ace3.db = LibStub("AceDB-3.0"):New("LumenDB", defaults, true)
+    local config = LibStub("AceConfig-3.0")
+    local cd = LibStub("AceConfigDialog-3.0")
+
+    config:RegisterOptionsTable("LumenBase", OptionBase)
+    Ace3.optionBaseFrame = cd:AddToBlizOptions("LumenBase", "Lumen")
+
+    config:RegisterOptionsTable("LumenProfiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(Ace3.db))
+    Ace3.optionProfileFrame = cd:AddToBlizOptions("LumenProfiles", "Profiles", "Lumen")
+end
+
+function Ace3:OnEnable()
+    ns.Frames.Player()
+    ns.Frames.Target()
+    ns.Frames.Pet()
+    ns.Frames.Focus()
+    ns.Frames.TargetTarget()
+    ns.Frames.Party()
+    ns.Frames.Raid()
+    ns.Frames.Boss()
+end
 
 -- ------------------------------------------------------------------------
 -- > MATH

@@ -93,7 +93,7 @@ local function updateIcon(element, unit)
     local index = 1
     while (true) do
         local name, texture, count, debuffType, duration, expiration, caster, isStealable, nameplateShowSelf, spellID,
-              canApply, isBossDebuff, casterIsPlayer, nameplateShowAll, timeMod, effect1, effect2, effect3 =
+            canApply, isBossDebuff, casterIsPlayer, nameplateShowAll, timeMod, effect1, effect2, effect3 =
             UnitAura(unit, index)
 
         if (name == nil) then break end

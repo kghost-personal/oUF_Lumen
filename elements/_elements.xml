@@ -6,7 +6,6 @@
 	<Script file='spellwatchers.lua' />
 	<Script file='swing.lua' />
 	<Script file='blizzard.lua' />
-	<Script file='dispellable.lua' />
 	<Script file='masque.lua' />
 	<Script file='CustomClick.lua' />
 </Ui>

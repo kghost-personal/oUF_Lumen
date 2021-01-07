@@ -7,22 +7,23 @@ local Spells = {
         [268] = { -- Brewmaster
         },
         [270] = { -- Mistweaver
-            Dispel = 115450, -- Detox
-            BurstHeal = 116849, -- Life Cocoon
-            Taunt = 115546 -- Provoke
+            HelpRight = 115450, -- Detox
+            HelpAltRight = 116849, -- Life Cocoon
+            HarmAltRight = 115546 -- Provoke
         },
         [269] = { -- Windwalker
         }
     },
     DRUID = {
         [102] = { -- Balance
+            HelpRight = 2782 -- Remove Corruption
         },
         [103] = { -- Feral
         },
         [104] = { -- Guardian
         },
         [105] = { -- Restoration
-            Dispel = 88423 -- Nature's Cure
+            HelpRight = 88423 -- Nature's Cure
         }
     }
 }
@@ -39,7 +40,7 @@ end
 local function Update(self)
     if not self:CanChangeAttribute() then return end
 
-    function lookup(t, ...)
+    local function lookup(t, ...)
         for _, k in ipairs {...} do
             t = t[k]
             if not t then return nil end
@@ -51,11 +52,11 @@ local function Update(self)
     local spec = select(1, GetSpecializationInfo(GetSpecialization()))
     local info = lookup(Spells, class, spec)
     if (info ~= nil) then
-        SetAction(self, "help", "", info["Dispel"])
-        SetAction(self, "help", "alt-", info["BurstHeal"])
+        SetAction(self, "help", "", info["HelpRight"])
+        SetAction(self, "help", "alt-", info["HelpAltRight"])
 
-        SetAction(self, "harm", "", info["Interrupt"])
-        SetAction(self, "harm", "alt-", info["Taunt"])
+        SetAction(self, "harm", "", info["HarmRight"])
+        SetAction(self, "harm", "alt-", info["HarmAltRight"])
     end
 end
 
@@ -67,6 +68,7 @@ local function Enable(self)
         if not element.button then element.button = "2" end
 
         element.__owner, element.ForceUpdate = self, ForceUpdate
+        self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', Update, true)
         self:RegisterEvent('PLAYER_REGEN_DISABLED', Update, true)
         self:RegisterEvent('PLAYER_REGEN_ENABLED', Update, true)
         return true

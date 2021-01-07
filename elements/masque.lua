@@ -1,6 +1,6 @@
 local _, ns = ...
 
-local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns.G, ns.oUF
+local lum = ns.lum
 
 local MSQ = LibStub("Masque", true)
 local MSQ_ButtonData = {
@@ -33,6 +33,7 @@ function lum:CreateMasqueIcon(button, size)
     data.Cooldown = button.cd
     data.Count = button.count
     data.Icon = button.icon
+    data.Border = button.overlay
 
     GroupAura:AddButton(button, data)
 end

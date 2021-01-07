@@ -142,7 +142,7 @@ local PostUpdatePlates = function(self, event, unit)
     end
 
     if not self.isPlayer then
-        lum:CreateNameString(self, m.fonts.mlang, cfg.fontsize - 5, "THINOUTLINE", 0, 4, "CENTER", self.cfg.width - 4)
+        lum:CreateNameString(self, cfg.fontsize - 5, "THINOUTLINE", 0, 4, "CENTER", self.cfg.width - 4)
         self:Tag(self.Name, "[lum:levelplus] [lum:name]")
     end
 end

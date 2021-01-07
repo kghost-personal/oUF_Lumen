@@ -20,14 +20,13 @@ local function CreateBoss(self)
     self:SetSize(self.cfg.width, self.cfg.height)
 
     -- Texts
-    lum:CreateNameString(self, m.fonts.mlang, cfg.fontsize + 2, "THINOUTLINE", 4, 0, "LEFT", self.cfg.width - 60)
-    lum:CreateHealthValueString(self, m.fonts.font, cfg.fontsize, "THINOUTLINE", -4, 0, "RIGHT")
-    lum:CreateHealthPercentString(self, m.fonts.font, cfg.fontsize, nil, -32, 0, "LEFT", "BACKGROUND")
-    lum:CreatePowerValueString(self, m.fonts.font, cfg.fontsize - 4, "THINOUTLINE", 0, 0, "CENTER")
+    lum:CreateNameString(self, cfg.fontsize + 2, nil, 4, 0, "LEFT", self.cfg.width - 60)
+    lum:CreateHealthValueString(self, cfg.fontsize, nil, -4, 0, "RIGHT")
+    lum:CreatePowerValueString(self, cfg.fontsize - 4, nil, 0, 0, "CENTER")
 
     -- Auras
     lum:SetBuffAuras(self, frame, 4, 1, self.cfg.height + 4, 2, "TOPRIGHT", self, "LEFT", -6, self.cfg.height - 3,
-                     "BOTTOMRIGHT", "LEFT", "UP", true)
+        "BOTTOMRIGHT", "LEFT", "UP", true)
 
     -- Castbar
     if self.cfg.castbar.enable then lum:CreateCastbar(self) end
@@ -57,19 +56,21 @@ end
 -- -----------------------------------
 -- > SPAWN UNIT
 -- -----------------------------------
-if cfg.units[frame].show then
-    oUF:RegisterStyle("oUF_Lumen:" .. frame:gsub("^%l", string.upper), CreateBoss)
-    oUF:SetActiveStyle("oUF_Lumen:" .. frame:gsub("^%l", string.upper))
+ns.Frames.Boss = function()
+    if cfg.units[frame].show then
+        oUF:RegisterStyle("oUF_LumenBoss", CreateBoss)
+        oUF:SetActiveStyle("oUF_LumenBoss")
 
-    for index = 1, MAX_BOSS_FRAMES or 5 do
-        local boss = oUF:Spawn(frame .. index, "oUF_LumenBoss" .. index)
-        -- local boss = oUF:Spawn("player", 'oUF_LumenBoss' .. index) -- Debug
+        for index = 1, MAX_BOSS_FRAMES or 5 do
+            local boss = oUF:Spawn(frame .. index, "oUF_LumenBoss" .. index)
+            -- local boss = oUF:Spawn("player", 'oUF_LumenBoss' .. index) -- Debug
 
-        if index == 1 then
-            boss:SetPoint(cfg.units.boss.pos.a1, cfg.units.boss.pos.af, cfg.units.boss.pos.a2, cfg.units.boss.pos.x,
-                          cfg.units.boss.pos.y)
-        else
-            boss:SetPoint("TOP", _G["oUF_LumenBoss" .. index - 1], "BOTTOM", 0, -16)
+            if index == 1 then
+                boss:SetPoint(cfg.units.boss.pos.a1, cfg.units.boss.pos.af, cfg.units.boss.pos.a2, cfg.units.boss.pos.x,
+                    cfg.units.boss.pos.y)
+            else
+                boss:SetPoint("TOP", _G["oUF_LumenBoss" .. index - 1], "BOTTOM", 0, -2)
+            end
         end
     end
 end

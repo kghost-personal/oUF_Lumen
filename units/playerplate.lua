@@ -26,7 +26,7 @@ local function CreatePlayerPlate(self, unit)
 
     local power = lum:CreatePowerBar(self, "nameplate")
     power:SetAllPoints(self)
-    lum:CreatePowerValueString(self, m.fonts.font, cfg.fontsize - 2, "THINOUTLINE", 0, 0, "CENTER")
+    lum:CreatePowerValueString(self, cfg.fontsize - 2, "THINOUTLINE", 0, 0, "CENTER")
 
     lum:CreateClassPower(self)
     lum:CreatePowerPrediction(self)

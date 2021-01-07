@@ -15,7 +15,7 @@ local PostUpdateHealth = function(health, unit, min, max)
     local perc = math.floor(min / max * 100 + 0.5)
 
     -- Inverted colors
-    if cfg.units[frame].health.invertedColors or cfg.units[frame].showPortraits then
+    if cfg.units[frame].health.invertedColors then
         health:SetStatusBarColor(unpack(cfg.colors.inverted))
         health.bg:SetVertexColor(unpack(api:RaidColor(unit)))
         health.bg:SetAlpha(1)
@@ -27,9 +27,6 @@ local PostUpdateHealth = function(health, unit, min, max)
         health:SetStatusBarColor(color:GetRGB())
     end
 
-    -- Show health value as the missing value
-    health.value:SetText("-" .. core:ShortNumber(max - min))
-
     if disconnnected or dead or ghost then
         self.HPborder:Hide()
         health.bg:SetVertexColor(.25, .25, .25)
@@ -37,7 +34,6 @@ local PostUpdateHealth = function(health, unit, min, max)
     else -- Player alive and kicking!
         health.value:Show()
         if (min == max) then -- It has max health
-            health.value:Hide()
             self.HPborder:Hide()
         else
             health.value:Show()
@@ -69,17 +65,6 @@ local PostUpdatePower = function(power, unit, min, max)
     end
 end
 
-local PostUpdatePortrait = function(element, unit)
-    element:SetModelAlpha(0.2)
-    element:SetDesaturation(0.9)
-end
-
--- local PartyUpdate = function(self)
---   print(api:IsPlayerHealer())
--- end
-
-local function PostCreateIcon(self, button) lum:CreateMasqueIcon(button, self.size) end
-
 -- -----------------------------------
 -- > PARTY STYLE
 -- -----------------------------------
@@ -101,76 +86,19 @@ local function CreateParty(self)
     self.Power.PostUpdate = PostUpdatePower
 
     -- Texts
-    lum:CreateHealthValueString(self, m.fonts.font, cfg.fontsize - 2, "THINOUTLINE", 4, 8, "LEFT")
-    lum:CreatePartyNameString(self, m.fonts.mlang, cfg.fontsize)
+    self.Name = lum:CreatePartyNameString(self, self.cfg, cfg.fontsize)
+    self.Name:SetPoint("TOPLEFT", self.Health, "TOPLEFT", 2, -2)
+    self.Attrs = lum:CreatePartyAttrsString(self, cfg.fontsize)
+    self.Attrs:SetPoint("LEFT", self.Name, "RIGHT", 0, 0)
+    lum:CreateHealthValueString(self, cfg.fontsize, nil, -2, 2, "BOTTOMRIGHT", "RIGHT")
 
-    if self.cfg.health.classColoredText then
-        self:Tag(self.Name, "[lum:playerstatus] [lum:leader] [raidcolor][lum:name]")
-    end
+    lum:CreatePartyAttrsOOCString(self, cfg.fontsize)
 
-    self.classText = api:CreateFontstring(self.OutOfCombatOverlay, m.fonts.font, cfg.fontsize, "THINOUTLINE")
-    self.classText:SetPoint("BOTTOMRIGHT", self, "BOTTOMRIGHT", -4, 5)
-    self.classText:SetJustifyH("RIGHT")
-    self:Tag(self.classText, "[lum:level] [raidcolor][class]")
+    lum:SetDebuffAuras(self, frame, 8, 1, self.cfg.height / 2 - 2, 0, "TOPRIGHT", self, "TOPRIGHT", 0, 0, "TOPRIGHT",
+        "LEFT", "DOWN", true, false)
 
-    -- Portrait
-    if self.cfg.showPortraits then
-        local Portrait = CreateFrame("PlayerModel", "PartyPortrait", self.Health)
-        Portrait:SetAllPoints()
-        Portrait:SetFrameLevel(self.Health:GetFrameLevel())
-        Portrait:SetAlpha(.2)
-        Portrait.PostUpdate = PostUpdatePortrait
-        self.Portrait = Portrait
-    end
-
-    if self.cfg.auras.buffs.show then
-        local buffs = lum:CreateAura(self, 12, 1, self.cfg.height / 2 - 2, 0)
-        buffs:SetPoint("TOPRIGHT", self, "TOPLEFT", -2, 2)
-        buffs.initialAnchor = "TOPRIGHT"
-        buffs["growth-x"] = "LEFT"
-        buffs["growth-y"] = "DOWN"
-        self.Buffs = buffs
-    end
-
-    if self.cfg.auras.debuffs.show then
-        -- Debuffs Filter (Blacklist)
-        local DebuffsCustomFilter = function(element, unit, button, name, _, _, _, duration, _, _, _, _, spellID)
-            if spellID then if ns.debuffs.list[frame][spellID] or duration == 0 then return false end end
-            return true
-        end
-
-        local debuffs = lum:CreateAura(self, 12, 1, self.cfg.height / 2 - 2, 0)
-        debuffs:SetPoint("TOPRIGHT", self.Buffs, "BOTTOMRIGHT", 0, 2)
-        debuffs.initialAnchor = "TOPRIGHT"
-        debuffs["growth-x"] = "LEFT"
-        debuffs["growth-y"] = "DOWN"
-        debuffs.showDebuffType = true
-        debuffs.CustomFilter = DebuffsCustomFilter
-        self.Debuffs = debuffs
-    end
-
-    local size = self.cfg.height / 2 - 2
-    local watchers = CreateFrame("Frame", nil, self)
-    watchers:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 2, 2)
-    watchers:SetSize(size * 8, size)
-    watchers.size = size
-    watchers.spacing = 0
-    watchers.initialAnchor = "BOTTOMLEFT"
-    watchers["growth-x"] = "RIGHT"
-    watchers["growth-y"] = "UP"
-    watchers.PostCreateIcon = PostCreateIcon
-    watchers.Watchers = {
-        [48438] = 1,
-        [33763] = 2,
-        [188550] = 2,
-        [774] = 3,
-        [8936] = 4,
-        [102351] = 5,
-        [102352] = 5,
-        [155777] = 6,
-        [240559] = 7
-    }
-    self.BuffWatchers = watchers
+    self.BuffWatchers = lum:CreateBuffWatchers(self, self.cfg.height / 2 - 2)
+    self.BuffWatchers.Watchers = cfg.BuffWatchers[select(2, UnitClass("player"))]
 
     -- Dispellable
     lum:CreateDispellable(self)
@@ -183,7 +111,7 @@ local function CreateParty(self)
 
     -- Raid Target Indicator
     local RaidTargetIndicator = self.Overlay:CreateTexture(nil, "OVERLAY")
-    RaidTargetIndicator:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+    RaidTargetIndicator:SetPoint("LEFT", self.GroupRoleIndicator, "RIGHT", 2, 0)
     RaidTargetIndicator:SetSize(16, 16)
     self.RaidTargetIndicator = RaidTargetIndicator
 
@@ -217,13 +145,6 @@ local function CreateParty(self)
 
     self.Overlay:Raise()
     self.OutOfCombatOverlay:Raise()
-
-    -- self:RegisterEvent("PLAYER_TALENT_UPDATE", PartyUpdate, true)
-    -- self:RegisterEvent("CHARACTER_POINTS_CHANGED", PartyUpdate, true)
-    -- self:RegisterEvent("PLAYER_ROLES_ASSIGNED", PartyUpdate, true)
-    -- self:RegisterEvent("GROUP_ROSTER_UPDATE", PartyUpdate, true)
-    -- self:RegisterEvent("GROUP_FORMED", PartyUpdate, true)
-    -- self:RegisterEvent("GROUP_JOINED", PartyUpdate, true)
 end
 
 local function CreatePartySub(self, unit)
@@ -245,15 +166,8 @@ local function CreatePartySub(self, unit)
     self.Health.colorSelection = true
 
     -- Texts
-    local name = api:CreateFontstring(self.Health, m.fonts.mlang, cfg.fontsize - 2, "THINOUTLINE")
-    name:SetPoint("LEFT", self.Health, 2, 0)
-    name:SetJustifyH("LEFT")
-    name:SetWidth(self.cfg.width / 2)
-    name:SetHeight(cfg.fontsize - 2)
-    self:Tag(name, "[lum:name]")
-    self.Name = name
-
-    lum:CreateHealthValueString(self, m.fonts.font, cfg.fontsize, "THINOUTLINE", -2, 0, "RIGHT")
+    self.Name = lum:CreatePartySubNameString(self, self.cfg, cfg.fontsize - 2)
+    lum:CreateHealthValueString(self, cfg.fontsize, nil, -2, 0, "RIGHT")
 
     -- Heal Prediction
     lum:CreateHealPrediction(self)
@@ -269,54 +183,74 @@ local function CreatePartyPet(self) return CreatePartySub(self, "partypet") end
 -- -----------------------------------
 -- > SPAWN UNIT
 -- -----------------------------------
-if cfg.units[frame].show then
-    oUF:RegisterStyle(A .. "Party", CreateParty)
-    oUF:SetActiveStyle(A .. "Party")
+local Frames = {}
 
-    local party = oUF:SpawnHeader("oUF_LumenParty", nil, nil, "showParty", true, "showRaid", false, "showPlayer", true,
-                                  "yOffset", -5, "groupBy", "ASSIGNEDROLE", "groupingOrder", "TANK,HEALER,DAMAGER",
-                                  "oUF-initialConfigFunction", ([[
-        self:SetAttribute('*type2', nil)
-  		self:SetHeight(%d)
-  		self:SetWidth(%d)
-  	]]):format(cfg.units[frame].height, cfg.units[frame].width))
-    party:SetPoint(cfg.units[frame].pos.a1, cfg.units[frame].pos.af, cfg.units[frame].pos.a2, cfg.units[frame].pos.x,
-                   cfg.units[frame].pos.y)
-    party:Show()
+local function SetStateVisibility(self, event, ...)
+    if (event == "PLAYER_ENTERING_WORLD") then
+        local condition = "[group:raid] hide; show"
+        if (select(2, GetInstanceInfo()) == "arena") then condition = "show" end
 
-    if cfg.units["partytarget"].show then
-        oUF:RegisterStyle(A .. "PartyTarget", CreatePartyTarget)
-        oUF:SetActiveStyle(A .. "PartyTarget")
-
-        local partytarget = oUF:SpawnHeader("oUF_LumenPartyTarget", nil, nil, "showParty", true, "showRaid", false,
-                                            "showPlayer", true, "yOffset",
-                                            -5 - cfg.units["party"].height + cfg.units["partytarget"].height, "groupBy",
-                                            "ASSIGNEDROLE", "groupingOrder", "TANK,HEALER,DAMAGER",
-                                            "oUF-initialConfigFunction", ([[
-                 self:SetAttribute('unitsuffix', 'target')
-                 self:SetAttribute('*type2', nil)
-                 self:SetHeight(%d)
-                 self:SetWidth(%d)
-            ]]):format(cfg.units["partytarget"].height, cfg.units["partytarget"].width))
-        partytarget:SetPoint("TOPLEFT", party, "TOPRIGHT", 6, 0)
-        partytarget:Show()
+        for _, frame in pairs(Frames) do
+            UnregisterAttributeDriver(frame, 'state-visibility')
+            RegisterAttributeDriver(frame, 'state-visibility', condition)
+            frame.visibility = condition
+        end
     end
+end
 
-    if cfg.units["partypet"].show then
-        oUF:RegisterStyle(A .. "PartyPet", CreatePartyPet)
-        oUF:SetActiveStyle(A .. "PartyPet")
+ns.Frames.Party = function()
+    if cfg.units[frame].show then
+        oUF:RegisterStyle(A .. "Party", CreateParty)
+        oUF:SetActiveStyle(A .. "Party")
 
-        local partypet = oUF:SpawnHeader("oUF_LumenPartyPet", nil, nil, "showParty", true, "showRaid", false,
-                                         "showPlayer", true, "yOffset",
-                                         -5 - cfg.units["party"].height + cfg.units["partypet"].height, "groupBy",
-                                         "ASSIGNEDROLE", "groupingOrder", "TANK,HEALER,DAMAGER",
-                                         "oUF-initialConfigFunction", ([[
-                 self:SetAttribute('unitsuffix', 'pet')
-                 self:SetAttribute('*type2', nil)
-                 self:SetHeight(%d)
-                 self:SetWidth(%d)
+        local party = oUF:SpawnHeader("oUF_LumenParty", nil, nil, "showParty", true, "showRaid", false, "showPlayer",
+            true, "yOffset", -5, "groupBy", "ASSIGNEDROLE", "groupingOrder", "TANK,HEALER,DAMAGER",
+            "oUF-initialConfigFunction", ([[
+        self:SetAttribute('*type2', nil)
+        self:SetHeight(%d)
+        self:SetWidth(%d)
+    ]]):format(cfg.units[frame].height, cfg.units[frame].width))
+        party:SetPoint(cfg.units[frame].pos.a1, cfg.units[frame].pos.af, cfg.units[frame].pos.a2,
+            cfg.units[frame].pos.x, cfg.units[frame].pos.y)
+        party:Show()
+        Frames["Party"] = party
+
+        if cfg.units["partytarget"].show then
+            oUF:RegisterStyle(A .. "PartyTarget", CreatePartyTarget)
+            oUF:SetActiveStyle(A .. "PartyTarget")
+
+            local partytarget = oUF:SpawnHeader("oUF_LumenPartyTarget", nil, nil, "showParty", true, "showRaid", false,
+                "showPlayer", true, "yOffset", -5 - cfg.units["party"].height + cfg.units["partytarget"].height,
+                "groupBy", "ASSIGNEDROLE", "groupingOrder", "TANK,HEALER,DAMAGER", "oUF-initialConfigFunction", ([[
+                self:SetAttribute('unitsuffix', 'target')
+                self:SetAttribute('*type2', nil)
+                self:SetHeight(%d)
+                self:SetWidth(%d)
+            ]]):format(cfg.units["partytarget"].height, cfg.units["partytarget"].width))
+            partytarget:SetPoint("TOPLEFT", party, "TOPRIGHT", 6, 0)
+            partytarget:Show()
+            Frames["PartyTarget"] = partytarget
+        end
+
+        if cfg.units["partypet"].show then
+            oUF:RegisterStyle(A .. "PartyPet", CreatePartyPet)
+            oUF:SetActiveStyle(A .. "PartyPet")
+
+            local partypet = oUF:SpawnHeader("oUF_LumenPartyPet", nil, nil, "showParty", true, "showRaid", false,
+                "showPlayer", true, "yOffset", -5 - cfg.units["party"].height + cfg.units["partypet"].height, "groupBy",
+                "ASSIGNEDROLE", "groupingOrder", "TANK,HEALER,DAMAGER", "oUF-initialConfigFunction", ([[
+                self:SetAttribute('unitsuffix', 'pet')
+                self:SetAttribute('*type2', nil)
+                self:SetHeight(%d)
+                self:SetWidth(%d)
             ]]):format(cfg.units["partypet"].height, cfg.units["partypet"].width))
-        partypet:SetPoint("TOPLEFT", party, "TOPRIGHT", 6, -cfg.units["partytarget"].height - 2)
-        partypet:Show()
+            partypet:SetPoint("TOPLEFT", party, "TOPRIGHT", 6, -cfg.units["partytarget"].height - 2)
+            partypet:Show()
+            Frames["PartyPet"] = partypet
+        end
+
+        local event = CreateFrame("Frame")
+        event:RegisterEvent("PLAYER_ENTERING_WORLD")
+        event:SetScript("OnEvent", SetStateVisibility)
     end
 end

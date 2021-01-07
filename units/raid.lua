@@ -5,7 +5,7 @@ local lum, core, api, cfg, m, G, oUF = ns.lum, ns.core, ns.api, ns.cfg, ns.m, ns
 local frame = "raid"
 
 -- -----------------------------------
--- > PARTY UNIT SPECIFIC FUNCTiONS
+-- > RAID UNIT SPECIFIC FUNCTiONS
 -- -----------------------------------
 
 -- Post Health Update
@@ -15,7 +15,7 @@ local PostUpdateHealth = function(health, unit, min, max)
     local perc = math.floor(min / max * 100 + 0.5)
 
     -- Inverted colors
-    if cfg.units[frame].health.invertedColors or cfg.units[frame].showPortraits then
+    if cfg.units[frame].health.invertedColors then
         health:SetStatusBarColor(unpack(cfg.colors.inverted))
         health.bg:SetVertexColor(unpack(api:RaidColor(unit)))
         health.bg:SetAlpha(1)
@@ -27,9 +27,6 @@ local PostUpdateHealth = function(health, unit, min, max)
         health:SetStatusBarColor(color:GetRGB())
     end
 
-    -- Show health value as the missing value
-    health.value:SetText("-" .. core:ShortNumber(max - min))
-
     if disconnnected or dead or ghost then
         self.HPborder:Hide()
         health.bg:SetVertexColor(.25, .25, .25)
@@ -37,7 +34,6 @@ local PostUpdateHealth = function(health, unit, min, max)
     else -- Player alive and kicking!
         health.value:Show()
         if (min == max) then -- It has max health
-            health.value:Hide()
             self.HPborder:Hide()
         else
             health.value:Show()
@@ -69,16 +65,11 @@ local PostUpdatePower = function(power, unit, min, max)
     end
 end
 
-local PostUpdatePortrait = function(element, unit)
-    element:SetModelAlpha(0.2)
-    element:SetDesaturation(0.9)
-end
-
 -- -----------------------------------
--- > PARTY STYLE
+-- > RAID STYLE
 -- -----------------------------------
 
-local function CreateRide(self)
+local function CreateRaid(self)
     self.mystyle = frame
     self.cfg = cfg.units[frame]
 
@@ -86,70 +77,46 @@ local function CreateRide(self)
 
     self.Overlay = CreateFrame("Frame", nil, self)
     self.Overlay:SetAllPoints()
+    self.OutOfCombatOverlay = CreateFrame("Frame", nil, self)
+    self.OutOfCombatOverlay:SetAllPoints()
+    RegisterStateDriver(self.OutOfCombatOverlay, "visibility", "[combat] hide; show")
 
     -- Health & Power
     self.Health.PostUpdate = PostUpdateHealth
     self.Power.PostUpdate = PostUpdatePower
 
     -- Texts
-    lum:CreateHealthValueString(self, m.fonts.font, cfg.fontsize - 2, "THINOUTLINE", 4, 8, "LEFT")
-    lum:CreatePartyNameString(self, m.fonts.mlang, cfg.fontsize)
+    self.Name = lum:CreatePartyNameString(self, self.cfg, cfg.fontsize)
+    self.Name:SetPoint("TOPLEFT", self.Health, "TOPLEFT", 2, -2)
+    self.Attrs = lum:CreatePartyAttrsString(self, cfg.fontsize)
+    self.Attrs:SetPoint("LEFT", self.Name, "RIGHT", 0, 0)
+    lum:CreateHealthValueString(self, cfg.fontsize, nil, -2, 2, "BOTTOMRIGHT", "RIGHT")
 
-    if self.cfg.health.classColoredText then
-        self:Tag(self.Name, "[lum:playerstatus] [lum:leader] [raidcolor][lum:name]")
-    end
+    lum:CreatePartyAttrsOOCString(self, cfg.fontsize)
+
+    lum:SetDebuffAuras(self, frame, 8, 1, self.cfg.height / 2 - 2, 0, "TOPRIGHT", self, "TOPRIGHT", 0, 0, "TOPRIGHT",
+        "LEFT", "DOWN", true, false)
+
+    self.BuffWatchers = lum:CreateBuffWatchers(self, self.cfg.height / 2 - 2)
+    self.BuffWatchers.Watchers = cfg.BuffWatchers[select(2, UnitClass("player"))]
 
     -- Dispellable
-    local button = CreateFrame('Button', nil, self.Overlay)
-    button:SetPoint('CENTER')
-    button:SetSize(22, 22)
-    button:SetToplevel(true)
-    button:EnableMouse(false)
-
-    local cd = CreateFrame('Cooldown', '$parentCooldown', button, 'CooldownFrameTemplate')
-    cd:SetHideCountdownNumbers(false) -- set to true to disable cooldown numbers on the cooldown spiral
-    cd:SetAllPoints()
-    cd:EnableMouse(false)
-
-    local icon = button:CreateTexture(nil, 'ARTWORK')
-    icon:SetAllPoints()
-
-    local overlay = button:CreateTexture(nil, 'OVERLAY')
-    overlay:SetTexture('Interface\\Buttons\\UI-Debuff-Overlays')
-    overlay:SetTexCoord(0.296875, 0.5703125, 0, 0.515625)
-    overlay:SetAllPoints()
-
-    local count = button:CreateFontString(nil, 'OVERLAY', 'NumberFontNormal', 1)
-    count:SetPoint('BOTTOMRIGHT', -1, 1)
-
-    local texture = self.Health:CreateTexture(nil, 'OVERLAY')
-    texture:SetTexture('Interface\\ChatFrame\\ChatFrameBackground')
-    texture:SetAllPoints()
-    texture:SetVertexColor(1, 1, 1, 0) -- hide in case the class can't dispel at all
-    texture.dispelAlpha = 0.2
-
-    button.cd = cd
-    button.icon = icon
-    button.overlay = overlay
-    button.count = count
-    button:Hide() -- hide in case the class can't dispel at all
-
-    self.Dispellable = {dispelIcon = button, dispelTexture = texture}
+    lum:CreateDispellable(self)
 
     -- Group Role Icon
-    local GroupRoleIndicator = lum:CreateGroupRoleIndicator(self.Overlay)
+    local GroupRoleIndicator = lum:CreateGroupRoleIndicator(self.OutOfCombatOverlay)
     GroupRoleIndicator:SetPoint("BOTTOMLEFT", self, "BOTTOMLEFT", 4, 8)
     GroupRoleIndicator:SetSize(12, 12)
     self.GroupRoleIndicator = GroupRoleIndicator
 
     -- Raid Target Indicator
-    local RaidTargetIndicator = self.Overlay:CreateTexture(nil, 'OVERLAY')
-    RaidTargetIndicator:SetPoint("TOPLEFT", self, "TOPLEFT", 2, -2)
+    local RaidTargetIndicator = self.Overlay:CreateTexture(nil, "OVERLAY")
+    RaidTargetIndicator:SetPoint("LEFT", self.GroupRoleIndicator, "RIGHT", 2, 0)
     RaidTargetIndicator:SetSize(16, 16)
     self.RaidTargetIndicator = RaidTargetIndicator
 
     -- Ready Check Icon
-    local ReadyCheck = self.Overlay:CreateTexture()
+    local ReadyCheck = self.OutOfCombatOverlay:CreateTexture()
     ReadyCheck:SetPoint("CENTER", self, "CENTER", 0, 0)
     ReadyCheck:SetSize(20, 20)
     ReadyCheck.finishedTimer = 10
@@ -165,26 +132,74 @@ local function CreateRide(self)
     -- Threat warning border
     lum:CreateThreatBorder(self)
 
+    -- Phase indicator
+    self.PhaseIndicator = CreateFrame("Frame", nil, self)
+    self.PhaseIndicator:SetSize(self.cfg.height, self.cfg.height)
+    self.PhaseIndicator:SetPoint("TOPRIGHT", self)
+    self.PhaseIndicator:EnableMouse(true)
+    self.PhaseIndicator.Icon = self.PhaseIndicator:CreateTexture(nil, "OVERLAY")
+    self.PhaseIndicator.Icon:SetAllPoints()
+
     self.Range = cfg.frames.range
     self.CustomClick = {}
 
     self.Overlay:Raise()
+    self.OutOfCombatOverlay:Raise()
 end
 
 -- -----------------------------------
 -- > SPAWN UNIT
 -- -----------------------------------
-if cfg.units[frame].show then
-    oUF:RegisterStyle(A .. "Raid", CreateRide)
-    oUF:SetActiveStyle(A .. "Raid")
+local Frames = {}
 
-    local raid = oUF:SpawnHeader("oUF_LumenParty", nil, "raid", "groupBy", "GROUP", "groupingOrder", "1,2,3,4,5,6,7,8",
-                                 "unitsPerColumn", 5, "showParty", false, "showPlayer", true, "showRaid", true,
-                                 "yOffset", -5, "oUF-initialConfigFunction", ([[
+local function SetStateVisibility(self, event, ...)
+    if (event == "PLAYER_ENTERING_WORLD") then
+
+        local condition = "[group:raid] show; hide"
+        local _, instanceType, _, _, maxPlayers = GetInstanceInfo()
+        if (instanceType == "arena") then condition = "hide" end
+
+        for i = 1, 8 do
+            local frame = Frames[i]
+            UnregisterAttributeDriver(frame, 'state-visibility')
+            if (maxPlayers and maxPlayers > 5 and i * 5 > maxPlayers) then
+                RegisterAttributeDriver(frame, 'state-visibility', "hide")
+                frame.visibility = "hide"
+            else
+                RegisterAttributeDriver(frame, 'state-visibility', condition)
+                frame.visibility = condition
+            end
+        end
+    end
+end
+
+ns.Frames.Raid = function()
+    if cfg.units[frame].show then
+        oUF:RegisterStyle(A .. "Raid", CreateRaid)
+        oUF:SetActiveStyle(A .. "Raid")
+
+        local last = nil
+        for i = 1, 8 do
+            local raid = oUF:SpawnHeader("oUF_LumenRaid" .. tostring(i), nil, nil, "showParty", false, "showRaid", true,
+                "showPlayer", true, "point", "TOP", "groupFilter", tostring(i), "yOffset", "-5",
+                "oUF-initialConfigFunction", ([[
             self:SetAttribute('*type2', nil)
             self:SetHeight(%d)
             self:SetWidth(%d)
         ]]):format(cfg.units[frame].height, cfg.units[frame].width))
-    raid:SetPoint(cfg.units[frame].pos.a1, cfg.units[frame].pos.af, cfg.units[frame].pos.a2, cfg.units[frame].pos.x,
-                  cfg.units[frame].pos.y)
+            if (i == 1) then
+                raid:SetPoint(cfg.units[frame].pos.a1, cfg.units[frame].pos.af, cfg.units[frame].pos.a2,
+                    cfg.units[frame].pos.x, cfg.units[frame].pos.y)
+            else
+                raid:SetPoint("TOPLEFT", last, "TOPRIGHT", 5, 0)
+            end
+            raid:Show()
+            Frames[i] = raid
+            last = raid
+        end
+
+        local event = CreateFrame("Frame")
+        event:RegisterEvent("PLAYER_ENTERING_WORLD")
+        event:SetScript("OnEvent", SetStateVisibility)
+    end
 end

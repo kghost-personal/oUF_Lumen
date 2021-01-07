@@ -64,6 +64,24 @@ cfg.fontsize = 14 -- The Global Font Size
 cfg.scale = 1 -- The elements Scale
 
 -- -----------------------------------
+-- > GENERAL
+-- -----------------------------------
+
+cfg.BuffWatchers = {
+    DRUID = {
+        [48438] = 1, -- Wild Growth
+        [33763] = 2, -- Lifebloom
+        [188550] = 2, -- Lifebloom (Leg)
+        [774] = 3, -- Rejuvenation
+        [8936] = 4, -- Regrowth
+        [102351] = 5, -- Cenarion Ward
+        [102352] = 5, -- Cenarion Ward
+        [207386] = 6, -- Efflorescence
+        [155777] = 7 -- Rejuvenation (Germination)
+    }
+}
+
+-- -----------------------------------
 -- > FRAMES
 -- -----------------------------------
 
@@ -89,7 +107,7 @@ cfg.frames = {
             margin = 2 -- Spacing between HP and Power Bars
         },
         power = {
-            height = 1.5 -- Height of the Power Bar
+            height = 2 -- Height of the Power Bar
         }
     },
     nameplate = {width = 120, height = 6, margin = 10, health = {margin = 0}, power = {height = 1.5}},
@@ -202,8 +220,8 @@ cfg.units = {
         },
         auras = {
             buffs = {show = false, spellName = false},
-            debuffs = {show = true, spellName = true},
-            barTimers = {show = true}
+            debuffs = {show = false, spellName = true},
+            barTimers = {show = false}
         },
         visibility = "[mod][combat][harm,nodead] show; [indoors,resting][flying] hide; show",
         fader = {fadeInAlpha = 1, fadeInDuration = 0.3, fadeOutAlpha = 0, fadeOutDuration = 0.3}
@@ -237,9 +255,9 @@ cfg.units = {
             height = cfg.frames.main.height * 1.1
         },
         auras = {
-            buffs = {show = true, spellName = false},
+            buffs = {show = false, spellName = false},
             debuffs = {show = false, spellName = false},
-            barTimers = {show = true}
+            barTimers = {show = false}
         },
         fader = {fadeInAlpha = 1, fadeInDuration = 0.3, fadeOutAlpha = 0, fadeOutDuration = 0.3}
     },
@@ -340,13 +358,8 @@ cfg.units = {
             text = {show = false}
         },
         name = {show = true},
-        castbar = {
-            enable = false,
-            color = {5 / 255, 107 / 255, 246 / 255},
-            width = 200,
-            height = cfg.frames.main.height
-        },
-        auras = {buffs = {show = false, spellName = false}, debuffs = {show = false, spellName = false}}
+        castbar = {enable = true, color = {5 / 255, 107 / 255, 246 / 255}, width = 200, height = cfg.frames.main.height},
+        auras = {buffs = {show = true, spellName = false}}
     },
     arena = {
         show = true,
@@ -389,15 +402,13 @@ cfg.units = {
         power = {
             show = true,
             height = 2,
-            classColored = true,
+            classColored = false,
             frequentUpdates = false,
             smooth = true,
             text = {show = true}
         },
         name = {show = true},
-        auras = {buffs = {show = true, spellName = false}, debuffs = {show = true, spellName = false}},
-        showPortraits = false,
-        forceRole = false
+        auras = {buffs = {show = true, spellName = false}, debuffs = {show = true, spellName = false}}
     },
     partytarget = {
         show = true,
@@ -412,7 +423,6 @@ cfg.units = {
             classColoredText = false,
             smooth = true
         },
-        power = {show = false, height = 0},
         name = {show = true}
     },
     partypet = {
@@ -428,13 +438,12 @@ cfg.units = {
             classColoredText = false,
             smooth = true
         },
-        power = {show = false, height = 0},
         name = {show = true}
     },
     raid = {
-        show = false,
-        width = 80,
-        height = 20,
+        show = true,
+        width = 130,
+        height = 40,
         pos = {a1 = "CENTER", a2 = "CENTER", af = "UIParent", x = 550, y = -20},
         health = {
             show = true,
@@ -448,15 +457,13 @@ cfg.units = {
         power = {
             show = true,
             height = 2,
-            classColored = true,
+            classColored = false,
             frequentUpdates = false,
             smooth = true,
             text = {show = true}
         },
         name = {show = true},
-        auras = {buffs = {show = true, spellName = false}, debuffs = {show = true, spellName = false}},
-        showPortraits = false,
-        forceRole = false
+        auras = {buffs = {show = true, spellName = false}, debuffs = {show = true, spellName = false}}
     },
     nameplate = {
         show = false,
