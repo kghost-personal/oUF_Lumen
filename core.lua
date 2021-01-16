@@ -1,4 +1,4 @@
-local _, ns = ...
+local addon, ns = ...
 
 local core = CreateFrame("Frame") -- Core methods
 ns.core = core
@@ -54,15 +54,29 @@ function Ace3:SetOption(info, key)
 end
 
 function Ace3:OnInitialize()
+    local title = GetAddOnMetadata(addon, 'title')
+
+    -- Remove MovableFrames option
+    local nextFreeArraySpace = 1;
+    for i = 1, #INTERFACEOPTIONS_ADDONCATEGORIES do
+        local v = INTERFACEOPTIONS_ADDONCATEGORIES[i];
+        if (v.name ~= title) then
+            INTERFACEOPTIONS_ADDONCATEGORIES[nextFreeArraySpace] = INTERFACEOPTIONS_ADDONCATEGORIES[i];
+            nextFreeArraySpace = nextFreeArraySpace + 1;
+        end
+    end
+    for i = nextFreeArraySpace, #INTERFACEOPTIONS_ADDONCATEGORIES do INTERFACEOPTIONS_ADDONCATEGORIES[i] = nil; end
+    InterfaceAddOnsList_Update();
+
     Ace3.db = LibStub("AceDB-3.0"):New("LumenDB", defaults, true)
     local config = LibStub("AceConfig-3.0")
     local cd = LibStub("AceConfigDialog-3.0")
 
     config:RegisterOptionsTable("LumenBase", OptionBase)
-    Ace3.optionBaseFrame = cd:AddToBlizOptions("LumenBase", "Lumen")
+    Ace3.optionBaseFrame = cd:AddToBlizOptions("LumenBase", title)
 
     config:RegisterOptionsTable("LumenProfiles", LibStub("AceDBOptions-3.0"):GetOptionsTable(Ace3.db))
-    Ace3.optionProfileFrame = cd:AddToBlizOptions("LumenProfiles", "Profiles", "Lumen")
+    Ace3.optionProfileFrame = cd:AddToBlizOptions("LumenProfiles", "Profiles", title)
 end
 
 function Ace3:OnEnable()

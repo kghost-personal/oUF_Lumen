@@ -37,9 +37,6 @@ At least one of the above widgets must be present for the element to work.
 --]] local _, ns = ...
 local oUF = ns.oUF
 
-local VISIBLE = 1
-local HIDDEN = 0
-
 local function UpdateTooltip(self) GameTooltip:SetUnitAura(self:GetParent().__owner.unit, self:GetID()) end
 
 local function onEnter(self)
